@@ -15,4 +15,28 @@ public static class Helpers
 		
         return Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0, 0), 100.0f);
     }
+
+    public static Sprite LoadSlicedSprite(string asset, int edgePx)
+    {
+        var stream = Assembly.GetExecutingAssembly()
+            .GetManifestResourceStream($"NoodleMapper.Resources.{asset}");
+
+        byte[] data = new byte[stream!.Length];
+        stream.Read(data, 0, (int)stream.Length);
+
+        Texture2D texture2D = new Texture2D(2, 2);
+        texture2D.LoadImage(data);
+
+        var border = new Vector4(edgePx, edgePx, edgePx, edgePx);
+
+        return Sprite.Create(
+            texture2D,
+            new Rect(0, 0, texture2D.width, texture2D.height),
+            new Vector2(0.5f, 0.5f),
+            100f,
+            0,
+            SpriteMeshType.FullRect,
+            border
+        );
+    }
 }

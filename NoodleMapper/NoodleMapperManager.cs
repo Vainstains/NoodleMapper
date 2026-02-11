@@ -21,17 +21,8 @@ public class NoodleMapperManager : MonoBehaviour
             Destroy(s_instance!.gameObject);
             
         s_instance = this;
-        
-        var map = BeatSaberSongContainer.Instance.Map;
-        if (!map.CustomData.HasKey("noodleMap"))
-            map.CustomData["noodleMap"] = "map";
 
-        if (map.CustomData.HasKey("noodleMap"))
-        {
-            string noodleMap = map.CustomData["noodleMap"];
-            string path = $"{BeatSaberSongContainer.Instance.Info.Directory}/{noodleMap}.noodle";
-            Map = new NoodleMap(path);
-        }
+        var map = BeatSaberSongContainer.Instance.Map;
     }
 
     public void OnExtensionButtonClicked()
@@ -96,9 +87,28 @@ public class NoodleEffectSpan
         var filters = node.GetValueOrDefault("filters", new JSONArray());
         for (int i = 0; i < filters.Count; i++)
         {
-            var filter = filters[i];
-            var type = filter.GetValueOrDefault("type", "");
+            var filterNode = filters[i];
+            
+            var filter = ParseFilter(filterNode);
         }
+
+        return span;
+    }
+
+    private static INoodleFilter ParseFilter(JSONNode filterNode)
+    {
+        string type = filterNode.GetValueOrDefault("type", "");
+        
+        if (string.IsNullOrEmpty(type))
+            return new UnknownFilter(filterNode);
+
+        switch (type)
+        {
+            case "HandType":
+                return HandTypeFilter.FromJSONNode(filterNode);
+        }
+        
+        return new UnknownFilter(filterNode);
     }
 }
 
@@ -111,6 +121,18 @@ public enum HandType
 {
     Left = 0,
     Right = 1
+}
+
+public class UnknownFilter : INoodleFilter
+{
+    public JSONNode Node { get; }
+    public bool TestAgainst(BaseObject obj) => true;
+
+    public UnknownFilter(JSONNode node)
+    {
+        Node = node;
+    }
+
 }
 
 public class HandTypeFilter : INoodleFilter
@@ -129,5 +151,12 @@ public class HandTypeFilter : INoodleFilter
                 return arc.Color == (int)Hand;
         }
         return false;
+    }
+
+    public static HandTypeFilter FromJSONNode(JSONNode node)
+    {
+        var filter = new HandTypeFilter();
+        filter.Hand = (HandType)(int)node.GetValueOrDefault("hand", 0);
+        return filter;
     }
 }
