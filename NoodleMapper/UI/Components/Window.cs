@@ -17,15 +17,21 @@ public abstract class Window : MonoBehaviour
     protected RectTransform RT = null!;
     protected RectTransform ContentRect = null!;
     
+    public abstract string WindowName { get; }
+    
     protected virtual void Init()
     {
-        var bg = gameObject.AddComponent<Image>();
-        bg.color = new Color(0.1f, 0.1f, 0.1f);
+        var bg = RT.AddImage(
+            StaticAssets.RoundRectBorderedSharp,
+            new Color(0.25f, 0.25f, 0.25f)
+        );
         
-        const float titleBarThickness = 20;
+        const float titleBarThickness = 24;
         var titleBar = RT.AddChild(RectTransform.Edge.Top).ExtendBottom(titleBarThickness);
-        var titleBarImg = titleBar.gameObject.AddComponent<Image>();
-        titleBarImg.color = new Color(0.15f, 0.15f, 0.15f);
+        var titleBarImg = titleBar.AddImage(
+            StaticAssets.RoundRectBordered,
+            new Color(0.25f, 0.25f, 0.25f)
+        );
 
         ContentRect = RT.AddChild().InsetTop(titleBarThickness).Inset(2);
 
@@ -33,17 +39,38 @@ public abstract class Window : MonoBehaviour
         var titleBarCloseButtonRect = titleBar.AddChild(RectTransform.Edge.Right)
             .ExtendLeft(titleBarThickness).Inset(4);
 
-        titleBarDraggerRect.gameObject.AddInitComponent<DragHandler>((PointerEventData e) =>
+        titleBarDraggerRect.AddClearImage();
+        titleBarDraggerRect.AddInitComponent<DragHandler>((PointerEventData e) =>
         {
             RT.anchoredPosition += e.delta;
             RT.SetAsLastSibling();
         });
-        titleBarDraggerRect.gameObject.AddComponent<Image>().color = Color.clear;
 
-        titleBarCloseButtonRect.gameObject.AddInitComponent<NoodleButton>(
-            new Color(0.8f, 0.1f, 0.2f),
+        titleBarCloseButtonRect.AddInitComponent<NoodleButton>(
+            new Color(0.9f, 0.1f, 0.3f),
             (Action)Close
         );
+        var closeButtonImage = titleBarCloseButtonRect.AddChild().AddImage(StaticAssets.CloseButton);
+        closeButtonImage.raycastTarget = false;
+        closeButtonImage.sprite = StaticAssets.CloseButton;
+
+        titleBarDraggerRect.AddChild().InsetLeft(3).AddLabel(WindowName);
+
+        var lowerCorner = RT.AddChildBottomRight().ExtendLeft(16).ExtendTop(16);
+        lowerCorner.AddImage(StaticAssets.WindowCorner);
+        lowerCorner.AddInitComponent<DragHandler>((PointerEventData e) =>
+        {
+            var offsetMax = RT.offsetMax;
+            offsetMax.x += e.delta.x;
+            var offsetMin = RT.offsetMin;
+            offsetMin.y += e.delta.y;
+            
+            offsetMax.x = Mathf.Max(offsetMax.x, offsetMin.x + 100);
+            offsetMin.y = Mathf.Min(offsetMin.y, offsetMax.y - 100);
+            
+            RT.offsetMax = offsetMax;
+            RT.offsetMin = offsetMin;
+        });
     }
     
     public void Close()

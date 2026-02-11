@@ -100,6 +100,7 @@
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="UI\Components\DragHandler.cs" />
         <Compile Include="UI\Components\Window.cs" />
+        <Compile Include="UI\StaticAssets.cs" />
         <Compile Include="Utils\CMCanvasGroup.cs" />
         <Compile Include="Utils\Data.cs" />
         <Compile Include="Utils\Helpers.cs" />

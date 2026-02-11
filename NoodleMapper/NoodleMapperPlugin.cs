@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Beatmap.Enums;
+using NoodleMapper.UI;
 using NoodleMapper.UI.Components;
 using NoodleMapper.Utils;
 using UnityEngine;
@@ -24,7 +25,8 @@ public class NoodleMapperPlugin
     {
         SceneManager.sceneLoaded += SceneLoaded;
         LoadedDifficultySelectController.LoadedDifficultyChangedEvent += LoadedDifficultyChanged;
-
+        
+        StaticAssets.Load();
         var iconSprite = Helpers.LoadSprite("ExtensionButtonIcon.png");
         ExtensionButtons.AddButton(iconSprite, "This is the tooltip", OnExtensionButtonClick);
     }
@@ -42,6 +44,8 @@ public class NoodleMapperPlugin
     private async void SceneLoaded(Scene scene, LoadSceneMode mode)
     {
         m_currentScene = scene;
+        if (scene.buildIndex != EditorSceneBuildIndex)
+            return;
         await Task.Delay(500);
         WindowContainer.EnsureContainerExists();
             
@@ -56,6 +60,8 @@ public class MainWindow : Window
 {
     private static MainWindow? s_uiInstance;
 
+    public override string WindowName => "NoodleMapper";
+
     public static void ToggleUI()
     {
         if (s_uiInstance)
@@ -65,6 +71,16 @@ public class MainWindow : Window
         }
         
         s_uiInstance = Window.CreateWindow<MainWindow>();
+    }
+
+    protected override void Init()
+    {
+        base.Init();
+
+        var fields = ContentRect.Vertical();
+        
+        var textbox = fields.Item().Field("text box").AddTextBox();
+        var dropdown = fields.Item().Field("dropdown").AddDropdown("option 1", "option 2", "rawr x3");
     }
 }
 
