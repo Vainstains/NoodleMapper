@@ -14,7 +14,7 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
         LoadedDifficultySelectController.LoadedDifficultyChangedEvent += SetUIDirty;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         LoadedDifficultySelectController.LoadedDifficultyChangedEvent -= SetUIDirty;
     }

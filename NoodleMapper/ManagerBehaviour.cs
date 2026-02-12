@@ -73,6 +73,10 @@ public abstract class ManagerBehaviour<T> : MonoBehaviour where T : ManagerBehav
         PostInit();
     }
 
+    /// <summary>
+    /// Whenever it's time to nuke yourself and reset all the state.
+    /// As long as they interface correctly, outside observers won't know a thing.
+    /// </summary>
     protected void ResetFresh()
     {
         var managerObject = new GameObject(typeof(T).Name);
