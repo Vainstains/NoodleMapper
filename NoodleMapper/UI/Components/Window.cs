@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using Beatmap.Base;
 using HarmonyLib;
+using NoodleMapper.Managers;
 using SimpleJSON;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using NoodleMapper.Utils;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace NoodleMapper.UI.Components;
@@ -18,22 +18,79 @@ public abstract class Window : MonoBehaviour
     protected RectTransform ContentRect = null!;
     
     public abstract string WindowName { get; }
-    
-    protected virtual void Init()
+
+    protected abstract void BuildUI();
+
+    protected void SetUIDirty()
     {
-        var bg = RT.AddImage(
-            StaticAssets.RoundRectBorderedSharp,
-            new Color(0.25f, 0.25f, 0.25f)
-        );
+        CancelInvoke(nameof(RebuildUI));
+        Invoke(nameof(RebuildUI), 0.05f);
+    }
+    
+    private void RebuildUI()
+    {
+        for (int i = ContentRect.transform.childCount - 1; i >= 0; i--)
+        {
+            var child = ContentRect.transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
+
+        BuildUI();
+    }
+    
+    protected void SetPositionDirty()
+    {
+        CancelInvoke(nameof(SavePosition));
+        Invoke(nameof(SavePosition), 0.05f);
+    }
+    
+    protected void LoadPosition()
+    {
+        Vector4 pos = Utils.Settings.Get($"Window_{WindowName}", new Vector4(
+            50, -20,
+            400, 300
+        ));
+        
+        RT.anchoredPosition = new Vector2(pos.x, pos.y);
+        RT.sizeDelta = new Vector2(pos.z, pos.w);
+    }
+
+    protected void SavePosition()
+    {
+        Utils.Settings.Set($"Window_{WindowName}", new Vector4(
+            RT.anchoredPosition.x,
+            RT.anchoredPosition.y,
+            RT.sizeDelta.x,
+            RT.sizeDelta.y
+        ));
+    }
+
+    private void Init()
+    {
+        float shadowRadius = Globals.Assets.Shadow.texture.width * 0.5f;
+        var shadowImg = RT.AddChild().Extend(shadowRadius * 0.85f).InsetTop(shadowRadius * 0.1f).AddImage(
+            Globals.Assets.Shadow,
+            new Color(0, 0, 0, 0.9f));
+        shadowImg.raycastTarget = false;
+        
+        var windowRect = RT.AddChild();
+        var bg = windowRect.AddChild().AddImage(
+            Globals.Assets.RoundRect,
+            new Color(0.22f, 0.22f, 0.22f));
         
         const float titleBarThickness = 24;
-        var titleBar = RT.AddChild(RectTransform.Edge.Top).ExtendBottom(titleBarThickness);
+        var titleBar = windowRect.AddChild(RectTransform.Edge.Top).ExtendBottom(titleBarThickness);
         var titleBarImg = titleBar.AddImage(
-            StaticAssets.RoundRectBordered,
-            new Color(0.25f, 0.25f, 0.25f)
-        );
+            Globals.Assets.TitleBar,
+            new Color(0.35f, 0.35f, 0.35f));
 
-        ContentRect = RT.AddChild().InsetTop(titleBarThickness).Inset(2);
+        windowRect.AddChild().AddImage(
+            Globals.Assets.RoundRectBorderOnly,
+            new Color(0.4f, 0.4f, 0.4f)).DisableRaycasts();
+
+        ContentRect = windowRect.AddChild().InsetTop(titleBarThickness).Inset(2).InsetLeft(4).InsetRight(4);
+        ContentRect = ContentRect.AddVerticalScrollView();
+        
 
         var titleBarDraggerRect = titleBar.AddChild().InsetRight(titleBarThickness);
         var titleBarCloseButtonRect = titleBar.AddChild(RectTransform.Edge.Right)
@@ -42,22 +99,20 @@ public abstract class Window : MonoBehaviour
         titleBarDraggerRect.AddClearImage();
         titleBarDraggerRect.AddInitComponent<DragHandler>((PointerEventData e) =>
         {
-            RT.anchoredPosition += e.delta;
-            RT.SetAsLastSibling();
+            RT.Move(e.delta).SetAsLastSibling();
+            SetPositionDirty();
         });
 
-        titleBarCloseButtonRect.AddInitComponent<NoodleButton>(
+        var closeButton = titleBarCloseButtonRect.AddInitComponent<NoodleButton>(
             new Color(0.9f, 0.1f, 0.3f),
-            (Action)Close
-        );
-        var closeButtonImage = titleBarCloseButtonRect.AddChild().AddImage(StaticAssets.CloseButton);
-        closeButtonImage.raycastTarget = false;
-        closeButtonImage.sprite = StaticAssets.CloseButton;
+            (Action)Close);
+        
+        closeButton.Content.AddChild().AddImage(Globals.Assets.CloseButton).DisableRaycasts();
 
         titleBarDraggerRect.AddChild().InsetLeft(3).AddLabel(WindowName);
 
-        var lowerCorner = RT.AddChildBottomRight().ExtendLeft(16).ExtendTop(16);
-        lowerCorner.AddImage(StaticAssets.WindowCorner);
+        var lowerCorner = windowRect.AddChildBottomRight().ExtendLeft(16).ExtendTop(16);
+        lowerCorner.AddImage(Globals.Assets.WindowCorner);
         lowerCorner.AddInitComponent<DragHandler>((PointerEventData e) =>
         {
             var offsetMax = RT.offsetMax;
@@ -70,6 +125,7 @@ public abstract class Window : MonoBehaviour
             
             RT.offsetMax = offsetMax;
             RT.offsetMin = offsetMin;
+            SetPositionDirty();
         });
     }
     
@@ -78,6 +134,8 @@ public abstract class Window : MonoBehaviour
         Destroy(gameObject);
     }
 
+    protected virtual void PostInit() {}
+
     protected static TWindow CreateWindow<TWindow>() where TWindow : Window
     {
         var windowContainer = FindObjectOfType<WindowContainer>().ContainerRect;
@@ -85,44 +143,14 @@ public abstract class Window : MonoBehaviour
         windowRect.pivot = Vector2.up;
         windowRect.anchorMin = Vector2.up;
         windowRect.anchorMax = Vector2.up;
-        windowRect.sizeDelta = new Vector2(200, 300);
-        windowRect.anchoredPosition = new Vector2(50, -20);
 
         var window = windowRect.gameObject.AddComponent<TWindow>();
         window.RT = windowRect;
         window.Init();
+        window.PostInit();
+        window.LoadPosition();
+        window.RebuildUI();
         
         return window;
-    }
-}
-
-public class WindowContainer : MonoBehaviour
-{
-    public RectTransform ContainerRect { get; set; }
-
-    public static void EnsureContainerExists()
-    {
-        var windowContainer = FindObjectOfType<WindowContainer>();
-        if (windowContainer != null)
-            return;
-        var mapEditorUI = FindFirstObjectByType<MapEditorUI>();
-        var groups = new List<CanvasGroup>(mapEditorUI.MainUIGroup);
-        var newGroupGO = new GameObject("WindowContainer");
-        newGroupGO.transform.SetParent(mapEditorUI.transform);
-        var canvas = newGroupGO.AddComponent<Canvas>();
-        canvas.sortingOrder = 9999;
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        var scaler = newGroupGO.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-        var group = canvas.gameObject.AddComponent<CanvasGroup>();
-        group.blocksRaycasts = true;
-        group.interactable = true;
-        var raycaster = canvas.gameObject.AddComponent<GraphicRaycaster>();
-        raycaster.ignoreReversedGraphics = true;
-        raycaster.blockingObjects = GraphicRaycaster.BlockingObjects.All;
-        raycaster.blockingMask = ~0;
-        groups.Add(group);
-        windowContainer = newGroupGO.AddComponent<WindowContainer>();
-        windowContainer.ContainerRect = canvas.RequireComponent<RectTransform>();
     }
 }

@@ -4,9 +4,11 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Beatmap.Enums;
+using HarmonyLib;
 using NoodleMapper.UI;
 using NoodleMapper.UI.Components;
 using NoodleMapper.Utils;
+using NoodleMapper.Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -17,70 +19,32 @@ namespace NoodleMapper;
 [Plugin("NoodleMapper")]
 public class NoodleMapperPlugin
 {
-    private const int EditorSceneBuildIndex = 3;
-    private Scene? m_currentScene;
-        
+    private CMSceneIndex m_currentScene;
     [Init]
     private void Init()
     {
-        SceneManager.sceneLoaded += SceneLoaded;
-        LoadedDifficultySelectController.LoadedDifficultyChangedEvent += LoadedDifficultyChanged;
+        new Harmony("com.Vainstains.NoodleMapper")
+            .PatchAll(Assembly.GetExecutingAssembly());
         
-        StaticAssets.Load();
-        var iconSprite = Helpers.LoadSprite("ExtensionButtonIcon.png");
-        ExtensionButtons.AddButton(iconSprite, "This is the tooltip", OnExtensionButtonClick);
-    }
+        Globals.Load();
 
-    private void OnExtensionButtonClick()
-    {
-        MainWindow.ToggleUI();
+        SceneManagers.Register<SongEditorManager>().ForScene(CMSceneIndex.SongEditMenu);
+        SceneManagers.Register<EditorManager>().ForScene(CMSceneIndex.Mapper);
+        
+        SceneManager.sceneLoaded += SceneLoaded;
     }
-
-    private void LoadedDifficultyChanged()
-    {
-        if (m_currentScene != null)
-            SceneLoaded(m_currentScene.Value, LoadSceneMode.Single);
-    }
+    
     private async void SceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        m_currentScene = scene;
-        if (scene.buildIndex != EditorSceneBuildIndex)
+        var cmScene = (CMSceneIndex)scene.buildIndex;
+        
+        if (mode == LoadSceneMode.Additive && cmScene == CMSceneIndex.Options)
             return;
-        await Task.Delay(500);
-        WindowContainer.EnsureContainerExists();
-            
-        var managerObject = new GameObject(nameof(NoodleMapperManager));
-        SceneManager.MoveGameObjectToScene(managerObject, scene);
-
-        managerObject.AddInitComponent<NoodleMapperManager>();
+        
+        m_currentScene = cmScene;
+        // await Task.Delay(500);
+        
+        WindowContainer.EnsureContainerExists(cmScene);
+        SceneManagers.SceneLoaded(scene);
     }
 }
-
-public class MainWindow : Window
-{
-    private static MainWindow? s_uiInstance;
-
-    public override string WindowName => "NoodleMapper";
-
-    public static void ToggleUI()
-    {
-        if (s_uiInstance)
-        {
-            s_uiInstance.Close();
-            return;
-        }
-        
-        s_uiInstance = Window.CreateWindow<MainWindow>();
-    }
-
-    protected override void Init()
-    {
-        base.Init();
-
-        var fields = ContentRect.Vertical();
-        
-        var textbox = fields.Item().Field("text box").AddTextBox();
-        var dropdown = fields.Item().Field("dropdown").AddDropdown("option 1", "option 2", "rawr x3");
-    }
-}
-

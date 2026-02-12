@@ -231,43 +231,6 @@ public static class Data {
         return (getter, setter);
     }
 	
-    public static (Getter<string?>, Setter<string?>) CustomGetSetColor(string field_name) {
-        Getter<string?> getter = (o) => {
-            if (GetNode(((BaseObject)o).CustomData, field_name) is JSONNode n) {
-                if (Settings.Get(Settings.ColorHex, true)) {
-                    var color = n.ReadColor();
-                    return $"#{ColorUtility.ToHtmlStringRGBA(color)}";
-                }
-                else {
-                    return JsonToRaw(n);
-                }
-            }
-            else {
-                return null;
-            }
-        };
-        Setter<string?> setter = (o, v) => {
-            if (string.IsNullOrEmpty(v)) {
-                RemoveNode(((BaseObject)o).CustomData, field_name);
-            }
-            else if (v![0] == '#') {
-                ColorUtility.TryParseHtmlString(v, out var color);
-                // // Plugin.Trace($"{v} => {color}");
-                var jc = new JSONArray();
-                jc.WriteColor(color);
-                SetNode(((BaseObject)o).GetOrCreateCustom(), field_name, jc);
-            }
-            else {
-                var n = RawToJson(v);
-                if (n != null) {
-                    SetNode(((BaseObject)o).CustomData, field_name, n);
-                }
-            }
-            (o as BaseObject)?.RefreshCustom();
-        };
-        return (getter, setter);
-    }
-	
     public static (Getter<bool?>, Setter<bool?>) EEGetSetComp(string name) {
         Data.Getter<bool?> getter = (ee) => (ee as BaseEnvironmentEnhancement)!.Components?.HasKey(name);
         Data.Setter<bool?> setter = (ee, v) => {
