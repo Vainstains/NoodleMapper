@@ -92,8 +92,9 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ManagerBehaviour.cs" />
         <Compile Include="Managers\EditorManager.cs" />
+        <Compile Include="Managers\ManagerBehaviour.cs" />
+        <Compile Include="Managers\SceneManagers.cs" />
         <Compile Include="Managers\SongEditorManager.cs" />
         <Compile Include="Managers\Windows\EditorMainWindow.cs" />
         <Compile Include="Managers\Windows\SongEditorWindow.cs" />
@@ -111,8 +112,10 @@
         <Compile Include="UI\Components\DragHandler.cs" />
         <Compile Include="UI\Components\NoodleButton.cs" />
         <Compile Include="UI\Components\NoodleDropdown.cs" />
+        <Compile Include="UI\Components\NoodleList.cs" />
         <Compile Include="UI\Components\NoodleTextbox.cs" />
         <Compile Include="UI\Components\NoodleToggle.cs" />
+        <Compile Include="UI\Components\NoodleVerticalLayout.cs" />
         <Compile Include="UI\Components\Window.cs" />
         <Compile Include="UI\Components\WindowContainer.cs" />
         <Compile Include="UI\GenericWindow.cs" />
@@ -124,8 +127,11 @@
         <Compile Include="Utils\JSONExtensions.cs" />
         <Compile Include="Utils\JsonKeys.cs" />
         <Compile Include="Utils\RectTransformExtensions.cs" />
+        <Compile Include="Utils\Scenes\CMScene.cs" />
+        <Compile Include="Utils\Scenes\SceneUtils.cs" />
         <Compile Include="Utils\Settings.cs" />
         <Compile Include="Utils\UnityComponentHelpers.cs" />
+        <Compile Include="Wiring\OnPluginInitAttribute.cs" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Resources\" />

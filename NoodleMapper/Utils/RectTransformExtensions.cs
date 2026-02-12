@@ -155,6 +155,20 @@ public static class RectTransformExtensions
             image.type = Image.Type.Sliced;
         return image;
     }
+    
+    public static Image AddSpriteImage(this RectTransform self, Sprite sprite) => self.AddImage(sprite, Color.white);
+    public static Image AddSpriteImage(this RectTransform self, Sprite sprite, Color color)
+    {
+        var imgRect = self.AddChildCenter();
+        imgRect.pivot = Vector2.one * 0.5f;
+        imgRect.sizeDelta = new Vector2(sprite.texture.width, sprite.texture.height);
+        var image = imgRect.RequireComponent<Image>();
+        image.sprite = sprite;
+        image.color = color;
+        if (sprite.border.sqrMagnitude > 0.5f)
+            image.type = Image.Type.Sliced;
+        return image;
+    }
 
     public static Image DisableRaycasts(this Image self)
     {
@@ -226,14 +240,17 @@ public static class RectTransformExtensions
 
         return inputField.InputField;
     }
-    
-    public static RectTransform AddVerticalScrollView(this RectTransform self)
+
+    public static RectTransform AddVerticalScrollView(this RectTransform self) =>
+        self.AddVerticalScrollView(out _);
+    public static RectTransform AddVerticalScrollView(this RectTransform self, out ScrollRect scrollRect)
     {
         var viewport = self.AddChild();
         viewport.name = "Viewport";
     
         var mask = viewport.RequireComponent<RectMask2D>();
-        var scrollRect = viewport.RequireComponent<ScrollRect>();
+        mask.softness = Vector2Int.up * 2;
+        scrollRect = viewport.RequireComponent<ScrollRect>();
     
         var content = viewport.AddChild(RectTransform.Edge.Top);
         content.name = "Content";
@@ -287,7 +304,26 @@ public static class RectTransformExtensions
         return content;
     }
 
-    public static VerticalLayoutGroup Vertical(
+    public static NoodleButton AddButton(this RectTransform self, string label, Action onClick)
+    {
+        var btn = self.AddInitComponent<NoodleButton>(new Color(0.4f, 0.4f, 0.4f), onClick);
+        btn.Content.AddLabel(label, TextAlignmentOptions.Center);
+        return btn;
+    }
+
+    public static NoodleList AddList(this RectTransform self)
+    {
+        return self.AddInitComponent<NoodleList>();
+    }
+
+    public static NoodleVerticalLayout AddVertical(
+        this RectTransform self,
+        float spacing = 1
+    )
+    {
+        return self.AddInitComponent<NoodleVerticalLayout>(spacing);
+    }
+    public static VerticalLayoutGroup AddVerticalLayoutRaw(
         this RectTransform self,
         float padding = 0,
         float spacing = 1

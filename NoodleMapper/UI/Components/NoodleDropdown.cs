@@ -37,18 +37,29 @@ public class NoodleDropdown : MonoBehaviour
         m_dropdown.targetGraphic = img;
         m_dropdown.captionText = label;
         m_dropdown.itemText = itemLabel;
+        
+        m_dropdown.onValueChanged.AddListener(v => m_onChange?.Invoke(v));
     }
-    public void SetOptions(IEnumerable<string> options)
+    public NoodleDropdown SetOptions(IEnumerable<string> options)
     {
         m_dropdown.options.Clear();
         foreach (var option in options)
         {
             m_dropdown.options.Add(new TMP_Dropdown.OptionData(option));
         }
+
+        return this;
     }
 
-    public void SetSelectedOption(int index)
+    public NoodleDropdown SetSelectedOption(int index)
     {
         m_dropdown.SetValueWithoutNotify(index);
+        return this;
+    }
+
+    public NoodleDropdown SetOnChange(Action<int> onChange)
+    {
+        m_onChange = onChange;
+        return this;
     }
 }

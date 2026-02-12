@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using Beatmap.Info;
@@ -92,9 +94,11 @@ public static class Helpers
     public static string GetModMapDataPath(string name) =>
         Path.Combine(NoodleMapperDataDir, $"{name}.modmap");
     public static IEnumerable<string> GetMapDataNames() =>
-        Directory.GetFiles(NoodleMapperDataDir, "*.map");
+        Directory.GetFiles(NoodleMapperDataDir, "*.map")
+            .Select(path => Path.GetFileNameWithoutExtension(path));
     public static IEnumerable<string> GetModMapDataNames() =>
-        Directory.GetFiles(NoodleMapperDataDir, "*.modmap");
+        Directory.GetFiles(NoodleMapperDataDir, "*.modmap")
+            .Select(path => Path.GetFileNameWithoutExtension(path));
 
     public static string ReadAllTextOrEmpty(string path)
     {
@@ -113,5 +117,25 @@ public static class Helpers
         }
 
         File.WriteAllText(path, contents);
+    }
+    
+    public static void AskYesNo(this PersistentUI ui, string title, string message, Action onYes)
+    {
+        DialogBox dialog = ui.CreateNewDialogBox().WithTitle(title);
+        dialog.AddComponent<TextComponent>()
+            .WithInitialValue(message);
+        dialog.AddFooterButton(() => { dialog.Close(); }, "Cancel");
+        dialog.AddFooterButton(() =>
+        {
+            onYes?.Invoke();
+            dialog.Close();
+        }, "Confirm");
+        
+        dialog.Open();
+    }
+    
+    public static void ShowMessage(this PersistentUI ui, string message)
+    {
+        ui.ShowDialogBox(message, _ => { }, PersistentUI.DialogBoxPresetType.Ok);
     }
 }

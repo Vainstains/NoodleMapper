@@ -7,6 +7,7 @@ using NoodleMapper.Managers.Windows;
 using NoodleMapper.Map;
 using NoodleMapper.ModMap;
 using NoodleMapper.UI;
+using NoodleMapper.UI.Components;
 using NoodleMapper.Utils;
 using SimpleJSON;
 using UnityEngine;
@@ -70,6 +71,32 @@ public class EditorManager : ManagerBehaviour<EditorManager>
         }
         
         BeatmapObjectContainerCollection.RefreshAllPools();
+    }
+
+    public static void DeleteModmap(string name)
+    {
+        var path = Helpers.GetModMapDataPath(name);
+        if (File.Exists(path))
+            File.Delete(path);
+
+        if (Instance == null)
+            return;
+
+        if (Instance.Map != null)
+        {
+            MapData map = Instance.Map;
+
+            if (map.ModMapFile == name)
+            {
+                map.SetModMapFile(null);
+            }
+        }
+    }
+
+    public static void CreateModmap(string name)
+    {
+        var path = Helpers.GetModMapDataPath(name);
+        Helpers.WriteAllText(path, "{}");
     }
 }
 

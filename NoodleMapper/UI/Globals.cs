@@ -1,4 +1,7 @@
-﻿using NoodleMapper.Utils;
+﻿using System;
+using System.Reflection;
+using NoodleMapper.Utils;
+using NoodleMapper.Wiring;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,41 +9,76 @@ namespace NoodleMapper.UI;
 
 public static class Globals
 {
+    private abstract class AssetAttribute : Attribute;
+    private class SpriteAssetAttribute : AssetAttribute
+    {
+        public bool IsPercentBased { get; }
+        public int BorderPx { get; }
+        public float BorderPct { get; }
+    
+        public SpriteAssetAttribute()
+        {
+            BorderPx = 0;
+            BorderPct = 0;
+            IsPercentBased = true;
+        }
+        public SpriteAssetAttribute(int borderPx)
+        {
+            BorderPx = borderPx;
+            BorderPct = 0;
+            IsPercentBased = false;
+        }
+        public SpriteAssetAttribute(float borderPct)
+        {
+            BorderPx = 0;
+            BorderPct = borderPct;
+            IsPercentBased = true;
+        }
+    }
     public static class Assets
     {
-        public static Sprite RoundRect = null!;
-        public static Sprite RoundRectBordered = null!;
-        public static Sprite RoundRectBorderedSharp = null!;
-        public static Sprite RoundRectBorderOnly = null!;
         
-        public static Sprite ButtonRaised = null!;
-        public static Sprite ButtonDepressed = null!;
+        [SpriteAsset(12)] public static Sprite RoundRect = null!;
+        [SpriteAsset(12)] public static Sprite RoundRectBordered = null!;
+        [SpriteAsset(12)] public static Sprite RoundRectBorderedSharp = null!;
+        [SpriteAsset(12)] public static Sprite RoundRectBorderOnly = null!;
+        
+        [SpriteAsset(12)] public static Sprite ButtonRaised = null!;
+        [SpriteAsset(12)] public static Sprite ButtonDepressed = null!;
 
-        public static Sprite CloseButton = null!;
-        public static Sprite WindowCorner = null!;
-        public static Sprite TitleBar = null!;
-        public static Sprite Shadow = null!;
+        [SpriteAsset] public static Sprite CloseButton = null!;
+        [SpriteAsset] public static Sprite WindowCorner = null!;
+        [SpriteAsset(12)] public static Sprite TitleBar = null!;
+        [SpriteAsset(0.5f)] public static Sprite Shadow = null!;
+        
+        [SpriteAsset] public static Sprite DragHandle = null!;
     }
 
     public static class Events
     {
         public static UnityEvent ExtensionButtonClicked = new ();
     }
-
-    public static void Load()
+    
+    [OnPluginInit]
+    private static void OnPluginInit()
     {
-        Assets.RoundRect = Helpers.LoadSprite("RoundRect.png", 12);
-        Assets.RoundRectBordered = Helpers.LoadSprite("RoundRectBordered.png", 12);
-        Assets.RoundRectBorderedSharp = Helpers.LoadSprite("RoundRectBorderedSharp.png", 12);
-        Assets.RoundRectBorderOnly = Helpers.LoadSprite("RoundRectBorderOnly.png", 12);
-        
-        Assets.ButtonRaised = Helpers.LoadSprite("ButtonRaised.png", 12);
-        Assets.ButtonDepressed = Helpers.LoadSprite("ButtonDepressed.png", 12);
-        
-        Assets.CloseButton = Helpers.LoadSprite("CloseButton.png");
-        Assets.WindowCorner = Helpers.LoadSprite("WindowCorner.png");
-        Assets.TitleBar = Helpers.LoadSprite("TitleBar.png", 12);
-        Assets.Shadow = Helpers.LoadSprite("Shadow.png", 0.5f);
+        var assetFields = typeof(Assets).GetFields();
+        for (int i = 0; i < assetFields.Length; i++)
+        {
+            var field = assetFields[i];
+            var resourceName = field.Name;
+            var attr = field.GetCustomAttribute<AssetAttribute>();
+            if (attr is null) continue;
+
+            if (attr is SpriteAssetAttribute spriteAttr)
+            {
+                resourceName += ".png";
+                if (spriteAttr.IsPercentBased)
+                    field.SetValue(null, Helpers.LoadSprite(resourceName, spriteAttr.BorderPct));
+                else
+                    field.SetValue(null, Helpers.LoadSprite(resourceName, spriteAttr.BorderPx));
+            }
+        }
         
         ExtensionButtons.AddButton(
             Helpers.LoadSprite("ExtensionButtonIcon.png"),

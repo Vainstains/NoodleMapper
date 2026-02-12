@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Beatmap.Enums;
@@ -9,6 +10,8 @@ using NoodleMapper.UI;
 using NoodleMapper.UI.Components;
 using NoodleMapper.Utils;
 using NoodleMapper.Managers;
+using NoodleMapper.Utils.Scenes;
+using NoodleMapper.Wiring;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -19,32 +22,22 @@ namespace NoodleMapper;
 [Plugin("NoodleMapper")]
 public class NoodleMapperPlugin
 {
-    private CMSceneIndex m_currentScene;
     [Init]
     private void Init()
     {
         new Harmony("com.Vainstains.NoodleMapper")
             .PatchAll(Assembly.GetExecutingAssembly());
         
-        Globals.Load();
+        var allStaticInitMethods = typeof(NoodleMapperPlugin).Assembly.GetTypes()
+            .SelectMany(t => t.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
+            .Where(m => m.IsStatic&& m.GetCustomAttribute(typeof(OnPluginInitAttribute), false) != null);
 
-        SceneManagers.Register<SongEditorManager>().ForScene(CMSceneIndex.SongEditMenu);
-        SceneManagers.Register<EditorManager>().ForScene(CMSceneIndex.Mapper);
-        
-        SceneManager.sceneLoaded += SceneLoaded;
-    }
-    
-    private async void SceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        var cmScene = (CMSceneIndex)scene.buildIndex;
-        
-        if (mode == LoadSceneMode.Additive && cmScene == CMSceneIndex.Options)
-            return;
-        
-        m_currentScene = cmScene;
-        // await Task.Delay(500);
-        
-        WindowContainer.EnsureContainerExists(cmScene);
-        SceneManagers.SceneLoaded(scene);
+        foreach (var method in allStaticInitMethods)
+        {
+            method.Invoke(null, null);
+        }
+
+        SceneManagers.Register<SongEditorManager>().ForScene(CMScene.SongEditMenu);
+        SceneManagers.Register<EditorManager>().ForScene(CMScene.Mapper);
     }
 }

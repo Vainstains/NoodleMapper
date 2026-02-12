@@ -11,8 +11,6 @@ namespace NoodleMapper.Managers.Windows;
 public class SongEditorWindow : GenericWindow<SongEditorWindow>
 {
     public override string WindowName => "Map Config";
-    
-    
     private DifficultySelect? m_difficultySelect;
 
     protected override void PostInit()
@@ -42,16 +40,13 @@ public class SongEditorWindow : GenericWindow<SongEditorWindow>
         SetUIDirty();
     }
 
-    protected override void BuildUI()
+    protected override void BuildUI(RectTransform content)
     {
+        SetupScrolling(ref content);
+        var list = content.AddList();
+        
         var characteristics = m_difficultySelect.Characteristics;
         
-        int i = 0;
-        var layout = ContentRect.Vertical(padding: 0, spacing: 1);
-        var evenColor = new Color(0.8f, 0.8f, 0.8f, 0.025f);
-        var oddColor = Color.clear;
-        var contentHeight = 0;
-
         foreach (var c in characteristics)
         {
             var characteristic = c.Key;
@@ -61,7 +56,6 @@ public class SongEditorWindow : GenericWindow<SongEditorWindow>
                 var diffSettings = d.Value;
                 var diffInfo = diffSettings.InfoDifficulty;
                 var customName = diffSettings.CustomName;
-                var idx = i++;
 
                 var nameText = $"{difficulty}{characteristic}";
                 if (!string.IsNullOrEmpty(customName))
@@ -69,10 +63,7 @@ public class SongEditorWindow : GenericWindow<SongEditorWindow>
                     nameText = $"{customName} <color=#FFFFFF50>({nameText})</color>";
                 }
 
-                var itemRect = layout.Item(height: 26);
-                contentHeight += 26;
-                itemRect.AddImage(null, idx % 2 == 0 ? evenColor : oddColor).DisableRaycasts();
-                itemRect.AddBorder(RectTransform.Edge.Bottom);
+                var itemRect = list.AddRow();
 
                 var (nameRect, mapRect) = itemRect.AddChild()
                     .InsetLeft(4).InsetRight(4).SplitHorizontal(0.6f);
@@ -96,8 +87,6 @@ public class SongEditorWindow : GenericWindow<SongEditorWindow>
                 // don't worry about the rest of the table columns, it's a placeholder for now
             }
         }
-        
-        ContentRect.sizeDelta = Vector2.up * contentHeight;
     }
 }
 

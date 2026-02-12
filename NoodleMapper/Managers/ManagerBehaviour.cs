@@ -1,0 +1,39 @@
+﻿using NoodleMapper.UI.Components;
+using NoodleMapper.Utils;
+using UnityEngine;
+
+namespace NoodleMapper.Managers;
+
+public abstract class ManagerBehaviour<T> : MonoBehaviour where T : ManagerBehaviour<T>
+{
+    private static T? s_instance;
+    public static T? Instance => s_instance;
+    protected abstract void PostInit();
+    
+    protected void Init()
+    {
+        if (s_instance)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Window.RebuildAll();
+        s_instance = GetComponent<T>();
+        
+        PostInit();
+    }
+
+    /// <summary>
+    /// Whenever it's time to nuke yourself and reset all the state.
+    /// As long as they interface correctly, outside observers won't know a thing.
+    /// </summary>
+    protected void ResetFresh()
+    {
+        if (s_instance)
+            Destroy(s_instance!.gameObject);
+        
+        var managerObject = new GameObject(typeof(T).Name);
+                
+        managerObject.AddInitComponent<T>();
+    }
+}

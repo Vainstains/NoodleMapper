@@ -1,6 +1,8 @@
-﻿using NoodleMapper.ModMap;
+﻿using System.IO;
+using NoodleMapper.ModMap;
 using NoodleMapper.Utils;
 using SimpleJSON;
+using UnityEngine;
 
 namespace NoodleMapper.Map;
 
@@ -17,9 +19,13 @@ public class MapData
 
         if (node.TryGetString("modMap", out var file))
         {
-            data.ModMapFile = file;
-            var modMapJson = Helpers.LoadJSONFile(Helpers.GetModMapDataPath(file));
-            data.ModMapData = ModMapData.FromJSON(modMapJson);
+            var path = Helpers.GetModMapDataPath(file);
+            if (File.Exists(path))
+            {
+                data.ModMapFile = file;
+                var modMapJson = Helpers.LoadJSONFile(path);
+                data.ModMapData = ModMapData.FromJSON(modMapJson);
+            }
         }
         
         return data;
@@ -36,5 +42,18 @@ public class MapData
         }
         
         return node;
+    }
+
+    public void SetModMapFile(string? file)
+    {
+        Debug.Log($"Setting active modmap: {file ?? "null"}");
+        ModMapFile = file;
+        if (ModMapFile == null)
+        {
+            ModMapData = null;
+            return;
+        }
+        var modMapJson = Helpers.LoadJSONFile(Helpers.GetModMapDataPath(file!));
+        ModMapData = ModMapData.FromJSON(modMapJson);
     }
 }

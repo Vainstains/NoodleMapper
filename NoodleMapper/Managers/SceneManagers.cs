@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using NoodleMapper.UI.Components;
 using NoodleMapper.Utils;
+using NoodleMapper.Utils.Scenes;
+using NoodleMapper.Wiring;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
-namespace NoodleMapper;
+namespace NoodleMapper.Managers;
 
 public static class SceneManagers
 {
     public interface IManagerRegistration
     {
-        IManagerRegistration ForScene(CMSceneIndex sceneIndex);
+        IManagerRegistration ForScene(CMScene scene);
     }
 
     private class ManagerRegistration : IManagerRegistration
     {
         public Type ManagerComponentType;
         
-        public CMSceneIndex SceneIndex = default;
+        public CMScene Scene = default;
 
         public ManagerRegistration(Type componentType)
         {
             ManagerComponentType = componentType;
         }
 
-        public IManagerRegistration ForScene(CMSceneIndex sceneIndex)
+        public IManagerRegistration ForScene(CMScene scene)
         {
-            SceneIndex = sceneIndex;
+            Scene = scene;
             return this;
         }
     }
@@ -42,13 +43,18 @@ public static class SceneManagers
         return registration;
     }
 
-    public static void SceneLoaded(Scene scene)
+    [OnPluginInit]
+    private static void OnPluginInit()
     {
-        var cmScene = (CMSceneIndex)scene.buildIndex;
+        SceneManager.sceneLoaded += SceneLoaded;
+    }
 
+    private static void SceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        WindowContainer.EnsureContainerExists((CMScene)scene.buildIndex);
         foreach (var manager in s_managers)
         {
-            if (manager.SceneIndex == cmScene)
+            if (manager.Scene == (CMScene)scene.buildIndex)
             {
                 var managerObject = new GameObject(manager.ManagerComponentType.Name);
                 SceneManager.MoveGameObjectToScene(managerObject, scene);
@@ -56,31 +62,5 @@ public static class SceneManagers
                 managerObject.AddInitComponent(manager.ManagerComponentType);
             }
         }
-    }
-}
-public abstract class ManagerBehaviour<T> : MonoBehaviour where T : ManagerBehaviour<T>
-{
-    private static T? s_instance;
-    public static T? Instance => s_instance;
-    protected abstract void PostInit();
-    
-    protected void Init()
-    {
-        if (s_instance)
-            Destroy(s_instance!.gameObject);
-        s_instance = GetComponent<T>();
-        
-        PostInit();
-    }
-
-    /// <summary>
-    /// Whenever it's time to nuke yourself and reset all the state.
-    /// As long as they interface correctly, outside observers won't know a thing.
-    /// </summary>
-    protected void ResetFresh()
-    {
-        var managerObject = new GameObject(typeof(T).Name);
-                
-        managerObject.AddInitComponent<T>();
     }
 }
