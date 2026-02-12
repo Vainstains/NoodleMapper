@@ -72,4 +72,11 @@ public abstract class ManagerBehaviour<T> : MonoBehaviour where T : ManagerBehav
         
         PostInit();
     }
+
+    protected void ResetFresh()
+    {
+        var managerObject = new GameObject(typeof(T).Name);
+                
+        managerObject.AddInitComponent<T>();
+    }
 }

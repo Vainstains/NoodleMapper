@@ -26,14 +26,16 @@ public class EditorManager : ManagerBehaviour<EditorManager>
             var json = Helpers.LoadJSONFile(Helpers.GetMapDataPath(mapFile));
             Map = MapData.FromJSON(json);
         }
-
+        
         Globals.Events.ExtensionButtonClicked.AddListener(EditorMainWindow.ToggleUI);
-
+        
+        LoadedDifficultySelectController.LoadedDifficultyChangedEvent += ResetFresh;
         SavingPatch.OnSavingDiff += Save;
     }
 
     private void OnDisable()
     {
+        LoadedDifficultySelectController.LoadedDifficultyChangedEvent -= ResetFresh;
         SavingPatch.OnSavingDiff -= Save;
     }
 
