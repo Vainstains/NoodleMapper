@@ -10,6 +10,7 @@ public abstract class GenericWindow<TWindow> : Window where TWindow : GenericWin
         if (s_uiInstance)
         {
             s_uiInstance!.Close();
+            s_uiInstance = null;
             return;
         }
         
@@ -21,5 +22,6 @@ public abstract class GenericWindow<TWindow> : Window where TWindow : GenericWin
             return;
         
         s_uiInstance!.Close();
+        s_uiInstance = null;
     }
 }

@@ -14,11 +14,11 @@ public abstract class ManagerBehaviour<T> : MonoBehaviour where T : ManagerBehav
     {
         if (s_instance)
         {
-            Destroy(gameObject);
             return;
         }
-        Window.RebuildAll();
+        
         s_instance = GetComponent<T>();
+        Window.RebuildAll();
         
         PostInit();
     }
@@ -31,6 +31,9 @@ public abstract class ManagerBehaviour<T> : MonoBehaviour where T : ManagerBehav
     {
         if (s_instance)
             Destroy(s_instance!.gameObject);
+        s_instance = null;
+        
+        Debug.Log($"Nuking {typeof(T).Name}.Instance and resetting...");
         
         var managerObject = new GameObject(typeof(T).Name);
                 

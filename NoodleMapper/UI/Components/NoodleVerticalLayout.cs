@@ -41,7 +41,7 @@ public class NoodleVerticalLayout : MonoBehaviour
         RefreshSize();
     }
 
-    private void RefreshSize()
+    public void RefreshSize()
     {
         // start out with the height contributed by any spacing
         float height = m_layout.spacing * (m_itemRects.Count - 1);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using NoodleMapper.Map;
 using NoodleMapper.UI;
@@ -27,7 +26,6 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
 
     private void DifficultyChanged()
     {
-        SetUIDirty();
         EditorModMapManagerWindow.CloseUI();
     }
 
@@ -47,6 +45,15 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
         var map = EditorManager.Instance.Map;
         
         BuildModMapSelector(layout, map);
+        
+        // testing the rearrangeable list
+        var list1 = layout.AddRow(120).AddRearrangeableList();
+
+        list1.AddItem(32);
+        list1.AddItem(32);
+        list1.AddItem(50);
+        list1.AddItem(50);
+        list1.AddItem(80);
     }
     
     private void BuildModMapSelector(NoodleVerticalLayout layout, MapData map)
@@ -75,61 +82,6 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
         moreRect.AddButton("...", () =>
         {
             EditorModMapManagerWindow.ToggleUI();
-        });
-    }
-}
-
-public class EditorModMapManagerWindow : GenericWindow<EditorModMapManagerWindow>
-{
-    public override string WindowName => "Modmap files";
-    
-    protected override void BuildUI(RectTransform content)
-    {
-        SetupScrolling(ref content);
-        
-        var modmaps = Helpers.GetModMapDataNames().ToList();
-        
-        var list = content.AddList();
-
-        foreach (var modmap in modmaps)
-        {
-            var itemRect = list.AddRow();
-            var innerRect = itemRect.AddChild()
-                .InsetLeft(4).InsetRight(4);
-
-            var windowName = modmap;
-            innerRect.AddLabel(modmap);
-            innerRect.AddChild(RectTransform.Edge.Right).ExtendLeft(26).AddButton("X", () =>
-            {
-                PersistentUI.Instance.AskYesNo($"Delete {windowName}?", "This cannot be undone.", () =>
-                {
-                    EditorManager.DeleteModmap(windowName);
-                    RebuildAll();
-                });
-            }).MainColor = new Color(0.7f, 0.1f, 0.3f);
-        }
-
-        list.AddRow().AddChild(RectTransform.Edge.Left).ExtendRight(50).AddButton("new...", AddNewModmap);
-    }
-
-    private void AddNewModmap()
-    {
-        PersistentUI.Instance.ShowInputBox("Name", result =>
-        {
-            if (string.IsNullOrEmpty(result))
-            {
-                PersistentUI.Instance.ShowMessage("Name cannot be empty.");
-                return;
-            }
-
-            if (File.Exists(Helpers.GetModMapDataPath(result)))
-            {
-                PersistentUI.Instance.ShowMessage($"{result} already exists.");
-                return;
-            }
-            
-            EditorManager.CreateModmap(result);
-            RebuildAll();
         });
     }
 }

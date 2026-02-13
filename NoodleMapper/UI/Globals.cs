@@ -52,6 +52,7 @@ public static class Globals
         [SpriteAsset(0.5f)] public static Sprite Shadow = null!;
         
         [SpriteAsset] public static Sprite DragHandle = null!;
+        [SpriteAsset] public static Sprite Endpoint = null!;
     }
 
     public static class Events

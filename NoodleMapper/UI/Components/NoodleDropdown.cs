@@ -38,7 +38,12 @@ public class NoodleDropdown : MonoBehaviour
         m_dropdown.captionText = label;
         m_dropdown.itemText = itemLabel;
         
-        m_dropdown.onValueChanged.AddListener(v => m_onChange?.Invoke(v));
+        m_dropdown.onValueChanged.AddListener(Changed);
+    }
+
+    private void Changed(int idx)
+    {
+        m_onChange?.Invoke(idx);
     }
     public NoodleDropdown SetOptions(IEnumerable<string> options)
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NoodleMapper.UI;
 using NoodleMapper.UI.Components;
 using TMPro;
@@ -156,7 +157,7 @@ public static class RectTransformExtensions
         return image;
     }
     
-    public static Image AddSpriteImage(this RectTransform self, Sprite sprite) => self.AddImage(sprite, Color.white);
+    public static Image AddSpriteImage(this RectTransform self, Sprite sprite) => self.AddSpriteImage(sprite, Color.white);
     public static Image AddSpriteImage(this RectTransform self, Sprite sprite, Color color)
     {
         var imgRect = self.AddChildCenter();
@@ -170,6 +171,13 @@ public static class RectTransformExtensions
         return image;
     }
 
+    public static DragHandler AddDragHandler(this RectTransform self)
+    {
+        if (!self.GetComponents<Graphic>().Any(g => g.raycastTarget))
+            self.AddClearImage();
+        return self.gameObject.AddComponent<DragHandler>();
+    }
+
     public static Image DisableRaycasts(this Image self)
     {
         self.raycastTarget = false;
@@ -181,6 +189,11 @@ public static class RectTransformExtensions
         var image = self.RequireComponent<Image>();
         image.color = Color.clear;
         return image;
+    }
+
+    public static NoodleRearrangeableList AddRearrangeableList(this RectTransform self)
+    {
+        return self.AddInitComponent<NoodleRearrangeableList>();
     }
 
     private const int FontSize = 18;
@@ -455,5 +468,21 @@ public static class RectTransformExtensions
         };
         func(rect, thickness);
         return self;
+    }
+    
+    public static RectTransform AddGetBorder(this RectTransform self, RectTransform.Edge edge, int thickness = 1, Color? color = null)
+    {
+        var rect = self.AddChild(edge);
+        rect.AddImage(null, color ?? new Color(1, 1, 1, 0.05f)).DisableRaycasts();
+        Func<RectTransform, float, RectTransform> func = edge switch
+        {
+            RectTransform.Edge.Top => ExtendTop,
+            RectTransform.Edge.Bottom => ExtendBottom,
+            RectTransform.Edge.Left => ExtendLeft,
+            RectTransform.Edge.Right => ExtendRight,
+            _ => (r, _) => r
+        };
+        func(rect, thickness);
+        return rect;
     }
 }

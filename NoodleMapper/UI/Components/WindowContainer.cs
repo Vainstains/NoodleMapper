@@ -18,7 +18,6 @@ public class WindowContainer : MonoBehaviour
         
         var containerObject = new GameObject("WindowContainer");
         var canvas = containerObject.AddComponent<Canvas>();
-        canvas.sortingOrder = 0;
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.pixelPerfect = true;
         var scaler = containerObject.AddComponent<CanvasScaler>();
@@ -36,6 +35,8 @@ public class WindowContainer : MonoBehaviour
         
         if (cmScene == CMScene.Mapper)
             AddGroupToMapEditorUI(group);
+        else
+            canvas.sortingOrder = 9999;
     }
 
     private static void AddGroupToMapEditorUI(CanvasGroup group)

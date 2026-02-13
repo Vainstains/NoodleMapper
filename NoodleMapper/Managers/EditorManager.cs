@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Beatmap.Base;
 using Beatmap.Helper;
 using HarmonyLib;
+using NoodleMapper.EditorThings;
 using NoodleMapper.Managers.Windows;
 using NoodleMapper.Map;
 using NoodleMapper.ModMap;
@@ -30,14 +32,19 @@ public class EditorManager : ManagerBehaviour<EditorManager>
         
         Globals.Events.ExtensionButtonClicked.AddListener(EditorMainWindow.ToggleUI);
         
-        LoadedDifficultySelectController.LoadedDifficultyChangedEvent += ResetFresh;
-        SavingPatch.OnSavingDiff += Save;
+        LoadedDifficultySelectController.LoadedDifficultyChangedEvent += DiffChanged;
+        EditorPatches.OnSavingDiff += Save;
     }
 
     private void OnDisable()
     {
-        LoadedDifficultySelectController.LoadedDifficultyChangedEvent -= ResetFresh;
-        SavingPatch.OnSavingDiff -= Save;
+        LoadedDifficultySelectController.LoadedDifficultyChangedEvent -= DiffChanged;
+        EditorPatches.OnSavingDiff -= Save;
+    }
+
+    private void DiffChanged()
+    {
+        ResetFresh();
     }
 
     private void Save()
@@ -100,14 +107,45 @@ public class EditorManager : ManagerBehaviour<EditorManager>
     }
 }
 
+public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackController>
+{
+    private RangeBarController m_rangeBarController = null!;
+    public void RefreshGridStuff()
+    {
+        m_rangeBarController.RefreshPositions();
+    }
+    protected override void PostInit()
+    {
+        m_rangeBarController = RangeBarController.Create();
+    }
+
+    public void SetRanges(IEnumerable<RawMapRange> ranges)
+    {
+        m_rangeBarController.UpdateRanges(ranges);
+    }
+
+    public void ClearRanges()
+    {
+        m_rangeBarController.UpdateRanges([]);
+    }
+}
+
 [HarmonyPatch]
-class SavingPatch
+class EditorPatches
 {
     public static event Action OnSavingDiff;
+    
     [HarmonyPatch(typeof(BaseDifficulty), nameof(BaseDifficulty.Save))]
     [HarmonyPrefix]
     static void Save()
     {
         OnSavingDiff?.Invoke();
+    }
+
+    [HarmonyPatch(typeof(BPMChangeGridContainer), nameof(BPMChangeGridContainer.RefreshModifiedBeat))]
+    [HarmonyPostfix]
+    static void BPMRefresh()
+    {
+        EditorGridAndTrackController.Instance.RefreshGridStuff();
     }
 }

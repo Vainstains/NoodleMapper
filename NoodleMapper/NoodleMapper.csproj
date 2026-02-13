@@ -92,11 +92,14 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="EditorThings\RangeBarController.cs" />
+        <Compile Include="EditorThings\RawMapRange.cs" />
         <Compile Include="Managers\EditorManager.cs" />
         <Compile Include="Managers\ManagerBehaviour.cs" />
         <Compile Include="Managers\SceneManagers.cs" />
         <Compile Include="Managers\SongEditorManager.cs" />
         <Compile Include="Managers\Windows\EditorMainWindow.cs" />
+        <Compile Include="Managers\Windows\EditorModMapManagerWindow.cs" />
         <Compile Include="Managers\Windows\SongEditorWindow.cs" />
         <Compile Include="Map\MapData.cs" />
         <Compile Include="ModMap\AssignTrackProcessor.cs" />
@@ -113,6 +116,7 @@
         <Compile Include="UI\Components\NoodleButton.cs" />
         <Compile Include="UI\Components\NoodleDropdown.cs" />
         <Compile Include="UI\Components\NoodleList.cs" />
+        <Compile Include="UI\Components\NoodleRearrangeableList.cs" />
         <Compile Include="UI\Components\NoodleTextbox.cs" />
         <Compile Include="UI\Components\NoodleToggle.cs" />
         <Compile Include="UI\Components\NoodleVerticalLayout.cs" />
@@ -138,13 +142,15 @@
       <EmbeddedResource Include="Resources\*.png" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <!-- Copy DLL always -->
-        <Exec Command="xcopy /Y /F &quot;$(ProjectDir)bin\$(Configuration)\$(TargetName).dll&quot; &quot;$(ChroMapperDir)\Plugins\&quot;" />
-
-        <!-- Copy PDB only in Debug mode -->
-        <Exec Condition=" '$(Configuration)' == 'Debug' " Command="xcopy /Y /F &quot;$(ProjectDir)bin\$(Configuration)\$(TargetName).pdb&quot; &quot;$(ChroMapperDir)\Plugins\&quot;" />
-    </Target>
+    
+        <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+            
+            <Exec Command="xcopy /Y /F &quot;$(ProjectDir)bin\$(Configuration)\$(TargetName).dll&quot; &quot;$(ChroMapperDir)\Plugins\&quot;" />
+        
+            
+            <Exec Condition=" '$(Configuration)' == 'Debug' " Command="xcopy /Y /F &quot;$(ProjectDir)bin\$(Configuration)\$(TargetName).pdb&quot; &quot;$(ChroMapperDir)\Plugins\&quot;" />
+        </Target>
+    
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
       <PropertyGroup>
         <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>

@@ -38,6 +38,7 @@ public class NoodleMapperPlugin
         }
 
         SceneManagers.Register<SongEditorManager>().ForScene(CMScene.SongEditMenu);
+        SceneManagers.Register<EditorGridAndTrackController>().ForScene(CMScene.Mapper);
         SceneManagers.Register<EditorManager>().ForScene(CMScene.Mapper);
     }
 }
