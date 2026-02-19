@@ -138,6 +138,10 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
                     return;
                 
                 range.Name = n;
+                
+                // ranges can really be anything but a common use for ranges is to annotate sections of the map.
+                // if the mapper is annotating *semantically*, it might help to sync the colors of like-named ranges.
+                // this kinda promotes color-coding your map and makes it nicer at a glance :)
                 var candidate = map.MapRanges.First(it => it.Name == n);
                 if (candidate != null)
                 {
