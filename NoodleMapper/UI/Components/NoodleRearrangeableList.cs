@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using NoodleMapper.Utils;
 using UnityEngine;
@@ -116,7 +117,8 @@ public class NoodleRearrangeableList : MonoBehaviour
 
         m_items.Add(item);
 
-        RefreshLayout();
+        RefreshLayout(0.0f);
+        
         return item;
     }
 
@@ -127,7 +129,7 @@ public class NoodleRearrangeableList : MonoBehaviour
         Destroy(m_items[index].gameObject);
         m_items.RemoveAt(index);
 
-        RefreshLayout();
+        RefreshLayout(0.0f);
     }
 
     private int m_oldItemIdx;
@@ -182,7 +184,7 @@ public class NoodleRearrangeableList : MonoBehaviour
         
         item.BG.offsetMin = new Vector2(0, 0);
 
-        RefreshLayout();
+        RefreshLayout(0.08f);
 
         if (m_newItemIdx != m_oldItemIdx)
             m_swapHandler?.Invoke(m_oldItemIdx, m_newItemIdx);
@@ -191,16 +193,30 @@ public class NoodleRearrangeableList : MonoBehaviour
     // -----------------------------
     // Layout
     // -----------------------------
-
-    private void RefreshLayout()
+    
+    private Coroutine? m_slidingCoroutine = null;
+    private float[] m_oldYPositions = null!;
+    private float[] m_newYPositions = null!;
+    private void RefreshLayout(float moveTime)
     {
+        if (m_slidingCoroutine != null)
+        {
+            StopCoroutine(m_slidingCoroutine);
+            m_slidingCoroutine = null;
+        }
+        
+        m_oldYPositions = new float[m_items.Count];
+        m_newYPositions = new float[m_items.Count];
+        
         float y = 0;
 
-        foreach (var item in m_items)
+        for (var i = 0; i < m_items.Count; i++)
         {
+            var item = m_items[i];
             var rt = item.Rect;
-
-            rt.anchoredPosition = new Vector2(0, -y);
+            
+            m_oldYPositions[i] = rt.anchoredPosition.y;
+            m_newYPositions[i] = -y;
 
             y += item.Height + Spacing;
         }
@@ -208,5 +224,38 @@ public class NoodleRearrangeableList : MonoBehaviour
         var size = m_rt.sizeDelta;
         size.y = Mathf.Max(0, y - Spacing);
         m_rt.sizeDelta = size;
+
+        m_slidingCoroutine = StartCoroutine(SlideElementsToNewPositions(moveTime));
+    }
+
+    private void SetSlideInterpolation(float t)
+    {
+        for (var i = 0; i < m_items.Count; i++)
+        {
+            var item = m_items[i];
+            var rt = item.Rect;
+            
+            rt.anchoredPosition = new Vector2(0, Mathf.Lerp(
+                m_oldYPositions[i], m_newYPositions[i], t));
+        }
+    }
+
+    private IEnumerator SlideElementsToNewPositions(float moveTime)
+    {
+        float time = 0;
+
+        while (time < moveTime)
+        {
+            float t = time / moveTime;
+            
+            t = Mathf.SmoothStep(0, 1, t);
+            
+            SetSlideInterpolation(t);
+            
+            time += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        
+        SetSlideInterpolation(1);
     }
 }

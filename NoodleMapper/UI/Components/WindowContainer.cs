@@ -46,6 +46,6 @@ public class WindowContainer : MonoBehaviour
         var groups = new List<CanvasGroup>(mapEditorUI.MainUIGroup);
         groups.Add(group);
         mapEditorUI.MainUIGroup = groups.ToArray();
-        group.transform.SetAsFirstSibling();
+        group.transform.SetAsLastSibling();
     }
 }

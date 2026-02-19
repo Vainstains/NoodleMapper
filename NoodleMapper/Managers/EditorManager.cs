@@ -1,18 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Beatmap.Base;
 using Beatmap.Helper;
 using HarmonyLib;
-using NoodleMapper.EditorThings;
 using NoodleMapper.Managers.Windows;
 using NoodleMapper.Map;
 using NoodleMapper.ModMap;
 using NoodleMapper.UI;
 using NoodleMapper.UI.Components;
 using NoodleMapper.Utils;
+using NoodleMapper.Wiring;
 using SimpleJSON;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace NoodleMapper.Managers;
 
@@ -34,6 +35,11 @@ public class EditorManager : ManagerBehaviour<EditorManager>
         
         LoadedDifficultySelectController.LoadedDifficultyChangedEvent += DiffChanged;
         EditorPatches.OnSavingDiff += Save;
+    }
+
+    private void Start()
+    {
+        EditorGridAndTrackController.Instance.RefreshGridStuff();
     }
 
     private void OnDisable()
@@ -107,26 +113,25 @@ public class EditorManager : ManagerBehaviour<EditorManager>
     }
 }
 
-public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackController>
+internal static class InputInstaller
 {
-    private RangeBarController m_rangeBarController = null!;
-    public void RefreshGridStuff()
+    [OnPluginInit]
+    private static void Init()
     {
-        m_rangeBarController.RefreshPositions();
-    }
-    protected override void PostInit()
-    {
-        m_rangeBarController = RangeBarController.Create();
-    }
-
-    public void SetRanges(IEnumerable<RawMapRange> ranges)
-    {
-        m_rangeBarController.UpdateRanges(ranges);
-    }
-
-    public void ClearRanges()
-    {
-        m_rangeBarController.UpdateRanges([]);
+        var map = CMInputCallbackInstaller.InputInstance.asset.actionMaps
+            .Where(x => x.name == "Node Editor")
+            .FirstOrDefault();
+        CMInputCallbackInstaller.InputInstance.Disable();
+			
+        var toggleWindow = map.AddAction("NoodleEditor Window", type: InputActionType.Button);
+        toggleWindow.AddCompositeBinding("ButtonWithOneModifier")
+            .With("Modifier", "<Keyboard>/ctrl")
+            .With("Button", "<Keyboard>/n");
+			
+        CMInputCallbackInstaller.InputInstance.Enable();
+        
+        
+        toggleWindow!.performed += EditorMainWindow.OnToggleWindow;
     }
 }
 

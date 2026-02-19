@@ -263,7 +263,7 @@ public static class RectTransformExtensions
     
         var mask = viewport.RequireComponent<RectMask2D>();
         mask.softness = Vector2Int.up * 2;
-        scrollRect = viewport.RequireComponent<ScrollRect>();
+        scrollRect = self.RequireComponent<ScrollRect>();
     
         var content = viewport.AddChild(RectTransform.Edge.Top);
         content.name = "Content";
@@ -317,6 +317,21 @@ public static class RectTransformExtensions
         return content;
     }
 
+    public static ContentSizeFitter AddSizeFitter(this RectTransform self,
+        ContentSizeFitter.FitMode horizontal = ContentSizeFitter.FitMode.Unconstrained,
+        ContentSizeFitter.FitMode vertical = ContentSizeFitter.FitMode.Unconstrained)
+    {
+        var fitter = self.gameObject.AddComponent<ContentSizeFitter>();
+        fitter.horizontalFit = horizontal;
+        fitter.verticalFit = vertical;
+        return fitter;
+    }
+    
+    public static NoodleButton AddButton(this RectTransform self, Action onClick)
+    {
+        var btn = self.AddInitComponent<NoodleButton>(new Color(0.4f, 0.4f, 0.4f), onClick);
+        return btn;
+    }
     public static NoodleButton AddButton(this RectTransform self, string label, Action onClick)
     {
         var btn = self.AddInitComponent<NoodleButton>(new Color(0.4f, 0.4f, 0.4f), onClick);
@@ -356,7 +371,7 @@ public static class RectTransformExtensions
         layout.childAlignment = TextAnchor.UpperLeft;
 
         layout.childControlWidth = true;
-        layout.childControlHeight = true;
+        layout.childControlHeight = false;
 
         layout.childForceExpandWidth = true;
         layout.childForceExpandHeight = false;
@@ -378,11 +393,7 @@ public static class RectTransformExtensions
         var child = parentRT.AddChild(RectTransform.Edge.Top).ExtendBottom(height);
         
         var layoutElement = child.RequireComponent<LayoutElement>();
-        layoutElement.minHeight = height;
         layoutElement.preferredHeight = height;
-        layoutElement.flexibleHeight = 0;
-        
-        layoutElement.flexibleWidth = 1;
 
         return child;
     }

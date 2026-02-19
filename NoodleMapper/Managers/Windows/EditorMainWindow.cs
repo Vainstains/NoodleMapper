@@ -6,17 +6,32 @@ using NoodleMapper.UI.Components;
 using NoodleMapper.Utils;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace NoodleMapper.Managers.Windows;
 
 public class EditorMainWindow : GenericWindow<EditorMainWindow>
 {
     public override string WindowName => "NoodleMapper";
-
+    private AudioTimeSyncController m_atsc;
+    
     protected override void PostInit()
     {
+        m_atsc = GameObject.FindObjectOfType<AudioTimeSyncController>();
         LoadedDifficultySelectController.LoadedDifficultyChangedEvent += DifficultyChanged;
+    }
+    
+    public static void OnToggleWindow(InputAction.CallbackContext _) {
+        if (   (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+               && !CMInputCallbackInstaller.IsActionMapDisabled(typeof(CMInput.INodeEditorActions))
+               && !NodeEditorController.IsActive) {
+            ToggleUI();
+        }
+        else {
+            Debug.LogError("Bullshit still required ;-;");
+        }
     }
 
     private void OnDisable()
@@ -42,18 +57,22 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
         
         SetupScrolling(ref content);
         var layout = content.AddVertical();
+        content.AddSizeFitter(vertical: ContentSizeFitter.FitMode.PreferredSize);
         var map = EditorManager.Instance.Map;
         
         BuildModMapSelector(layout, map);
         
         // testing the rearrangeable list
-        var list1 = layout.AddRow(120).AddRearrangeableList();
-
-        list1.AddItem(32);
-        list1.AddItem(32);
-        list1.AddItem(50);
-        list1.AddItem(50);
-        list1.AddItem(80);
+        
+        // var list1 = layout.AddRow(120).AddRearrangeableList();
+        //
+        // list1.AddItem(32);
+        // list1.AddItem(32);
+        // list1.AddItem(50);
+        // list1.AddItem(50);
+        // list1.AddItem(80);
+        
+        BuildMapRangeEditor(layout, map);
     }
     
     private void BuildModMapSelector(NoodleVerticalLayout layout, MapData map)
@@ -83,5 +102,149 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
         {
             EditorModMapManagerWindow.ToggleUI();
         });
+    }
+
+    private void BuildMapRangeEditor(NoodleVerticalLayout layout, MapData map)
+    {
+        var list = layout.AddRow().AddList();
+
+        for (var i = 0; i < map.MapRanges.Count; i++)
+        {
+            var range = map.MapRanges[i];
+            var itemRect = list.AddRow();
+
+            var (innerItemRect, deleteRect) = itemRect.SplitHorizontal(1.0f, bias: -26);
+            var (nameRect, (colorRect, (rangeRect, _))) = SplitRow(innerItemRect.InsetRight(4),
+                0.4f, 0.0f, 0.6f);
+            
+            var colorButton = colorRect.ExtendLeft(24).Move(-2, 0).AddButton(() => {});
+            colorButton.MainColor = new Color(range.Color.r, range.Color.g, range.Color.b);
+            colorButton.SetOnClick(() =>
+            {
+                PersistentUI.Instance.DoShowColorInputBox("Range color", col =>
+                {
+                    if (!col.HasValue)
+                        return;
+                    var color = col.Value;
+                    colorButton.MainColor = color;
+                    range.Color = color;
+                    EditorGridAndTrackController.Instance.RefreshGridStuff();
+                }, colorButton.MainColor);
+            });
+            
+            nameRect.InsetRight(8 + 26).AddTextBox().SetValue(range.Name).SetOnChange(n =>
+            {
+                if (n == null)
+                    return;
+                
+                range.Name = n;
+                var candidate = map.MapRanges.First(it => it.Name == n);
+                if (candidate != null)
+                {
+                    range.Color = candidate.Color;
+                    var c = candidate.Color;
+                    c.a = 1.0f;
+                    colorButton.MainColor = c;
+                }
+
+                EditorGridAndTrackController.Instance.RefreshGridStuff();
+            });
+            nameRect.AddGetBorder(RectTransform.Edge.Right).Move(4, 0);
+            
+            var label = rangeRect.AddLabel("-", alignmentOptions: TextAlignmentOptions.Center);
+            label.text = $"{range.StartBeat} - {range.EndBeat}";
+
+            rangeRect.AddChild(RectTransform.Edge.Left).ExtendRight(26).AddButton("=", () =>
+            {
+                var beat = m_atsc.CurrentJsonTime;
+                range.StartBeat = beat;
+                label.text = $"{range.StartBeat} - {range.EndBeat}";
+                EditorGridAndTrackController.Instance.RefreshGridStuff();
+            }).MainColor = new Color(0.3f, 0.4f, 0.6f);
+            rangeRect.AddChild(RectTransform.Edge.Right).ExtendLeft(26).AddButton("=", () =>
+            {
+                var beat = m_atsc.CurrentJsonTime;
+                range.EndBeat = beat;
+                label.text = $"{range.StartBeat} - {range.EndBeat}";
+                EditorGridAndTrackController.Instance.RefreshGridStuff();
+            }).MainColor = new Color(0.3f, 0.4f, 0.6f);
+
+            deleteRect.AddButton("X", () =>
+            {
+                PersistentUI.Instance.AskYesNo($"Delete {range.Name}?", "This cannot be undone.", () =>
+                {
+                    map.MapRanges.Remove(range);
+                    EditorGridAndTrackController.Instance.RefreshGridStuff();
+                    RebuildAll();
+                });
+            }).MainColor = new Color(0.7f, 0.1f, 0.3f);
+        }
+
+        var endRow = list.AddRow();
+        endRow.AddChild(RectTransform.Edge.Left).ExtendRight(50).AddButton("new...", AddNewMapRange);
+        endRow.AddChild(RectTransform.Edge.Left).ExtendRight(50).Move(52, 0).AddButton("sort", SortMapRanges);
+    }
+
+    private RectTransform[] SplitRow(RectTransform row, params float[] splitWidthsPct)
+    {
+        var rects = new RectTransform[splitWidthsPct.Length + 1];
+
+        float currentX = 0;
+
+        for (int i = 0; i < rects.Length; i++)
+        {
+            float width;
+            if (i < splitWidthsPct.Length)
+                width = splitWidthsPct[i];
+            else
+                width = 1.0f - currentX;
+            
+            var rect = row.AddChild();
+            rect.anchorMin = new Vector2(currentX, 0);
+            currentX += width;
+            rect.anchorMax = new Vector2(currentX, 1);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            rects[i] = rect;
+        }
+        
+        return rects;
+    }
+    
+    private static System.Random s_colorRandom = new System.Random();
+    
+    private void AddNewMapRange()
+    {
+        var map = EditorManager.Instance.Map;
+        if (map == null) return;
+        
+        int seed = Environment.TickCount + map.MapRanges.Count;
+        s_colorRandom = new System.Random(seed);
+    
+        float hue = (float)s_colorRandom.NextDouble();
+        float saturation = 0.2f + (float)s_colorRandom.NextDouble() * 0.5f;
+    
+        Color color = Color.HSVToRGB(hue, saturation, 1);
+        
+        var newRange = new MapRange
+        {
+            Name = $"Range {map.MapRanges.Count + 1}",
+            StartBeat = m_atsc.CurrentJsonTime,
+            EndBeat = m_atsc.CurrentJsonTime + 1,
+            Color = color
+        };
+    
+        map.MapRanges.Add(newRange);
+        EditorGridAndTrackController.Instance.RefreshGridStuff();
+        RebuildAll();
+    }
+
+    private void SortMapRanges()
+    {
+        var map = EditorManager.Instance.Map;
+        if (map == null) return;
+        
+        map.MapRanges.Sort((a, b) => a.StartBeat.CompareTo(b.StartBeat));
+        EditorGridAndTrackController.Instance.RefreshGridStuff();
+        RebuildAll();
     }
 }

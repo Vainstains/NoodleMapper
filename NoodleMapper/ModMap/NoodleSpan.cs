@@ -19,8 +19,9 @@ public class NoodleSpan
         for (var i = 0; i < filters.Count; i++)
         {
             var filterNode = filters[i];
-            
             var filter = ParseFilter(filterNode);
+            
+            span.Filters.Add(filter);
         }
 
         return span;

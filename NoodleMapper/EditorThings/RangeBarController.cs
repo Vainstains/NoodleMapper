@@ -33,14 +33,16 @@ public class RangeBarController : MonoBehaviour
     private class CachedRangeBar
     {
         public RangeBar RangeBar;
-        public float Start; // Store as SongBpmTime consistently
-        public float End;    // Store as SongBpmTime consistently
+        public float Start;
+        public float End;
+        public bool EndIsEnabled;
             
-        public CachedRangeBar(RangeBar rangeBar, float start, float end)
+        public CachedRangeBar(RangeBar rangeBar, float start, float end, bool endIsEnabled)
         {
             RangeBar = rangeBar;
             Start = start;
             End = end;
+            EndIsEnabled = endIsEnabled;
         }
     }
         
@@ -196,7 +198,7 @@ public class RangeBarController : MonoBehaviour
                     
                 label = rb.GetComponentInChildren<TextMeshProUGUI>();
                     
-                cachedBar = new CachedRangeBar(rb, start, end);
+                cachedBar = new CachedRangeBar(rb, start, end, range.EnableEndingEndpoint);
             }
         
             // Update cached times
@@ -274,6 +276,9 @@ public class RangeBarController : MonoBehaviour
         endRect.SetParent(bar.RangeBar.BarImage.transform);
             
         bar.RangeBar.StartMarker.color = color;
+
+        if (!bar.EndIsEnabled)
+            color.a = 0;
         bar.RangeBar.EndMarker.color = color;
     }
         

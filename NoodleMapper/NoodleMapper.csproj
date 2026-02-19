@@ -79,6 +79,9 @@
         <Reference Include="UnityEngine.ImageConversionModule">
             <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.TextRenderingModule">
             <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
         </Reference>
@@ -94,6 +97,7 @@
     <ItemGroup>
         <Compile Include="EditorThings\RangeBarController.cs" />
         <Compile Include="EditorThings\RawMapRange.cs" />
+        <Compile Include="Managers\EditorGridAndTrackController.cs" />
         <Compile Include="Managers\EditorManager.cs" />
         <Compile Include="Managers\ManagerBehaviour.cs" />
         <Compile Include="Managers\SceneManagers.cs" />
@@ -102,6 +106,7 @@
         <Compile Include="Managers\Windows\EditorModMapManagerWindow.cs" />
         <Compile Include="Managers\Windows\SongEditorWindow.cs" />
         <Compile Include="Map\MapData.cs" />
+        <Compile Include="Map\MapRange.cs" />
         <Compile Include="ModMap\AssignTrackProcessor.cs" />
         <Compile Include="ModMap\HandType.cs" />
         <Compile Include="ModMap\HandTypeFilter.cs" />

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using NoodleMapper.ModMap;
 using NoodleMapper.Utils;
 using SimpleJSON;
@@ -10,6 +11,8 @@ public class MapData
 {
     public string? ModMapFile { get; private set; } = null;
     public ModMapData? ModMapData { get; private set; } = null;
+
+    public List<MapRange> MapRanges { get; } = new();
     public static MapData FromJSON(JSONNode node)
     {
         var data = new MapData();
@@ -28,6 +31,15 @@ public class MapData
             }
         }
         
+        if (node.TryGetArray("ranges", out var ranges))
+        {
+            for (var i = 0; i < ranges.Count; i++)
+            {
+                var range = MapRange.FromJSON(ranges[i]);
+                data.MapRanges.Add(range);
+            }
+        }
+        
         return data;
     }
 
@@ -40,6 +52,13 @@ public class MapData
             node.Add("modMap", ModMapFile);
             Helpers.WriteAllText(Helpers.GetModMapDataPath(ModMapFile), ModMapData.ToJSON().ToString(4));
         }
+        
+        var rangesArray = new JSONArray();
+        foreach (var range in MapRanges)
+        {
+            rangesArray.Add(range.ToJSON());
+        }
+        node.Add("ranges", rangesArray);
         
         return node;
     }

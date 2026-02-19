@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NoodleMapper.Utils;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +52,6 @@ public class NoodleList : MonoBehaviour
 
     public void RefreshSize()
     {
-        // start out with the height contributed by any spacing
         float height = Spacing * (m_itemRects.Count - 1);
         
         // then add the rest
@@ -61,5 +61,11 @@ public class NoodleList : MonoBehaviour
         var sd = m_rt.sizeDelta;
         sd.y = height;
         m_rt.sizeDelta = sd;
+    }
+
+    private void OnTransformChildrenChanged()
+    {
+        CancelInvoke(nameof(RefreshSize));
+        Invoke(nameof(RefreshSize), 0.05f);
     }
 }

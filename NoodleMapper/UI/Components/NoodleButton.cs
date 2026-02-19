@@ -1,5 +1,6 @@
 ﻿using System;
 using NoodleMapper.Utils;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,8 +11,18 @@ public class NoodleButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private const int DepressDeltaY = 1;
-    
-    public Color MainColor;
+
+    private Color m_mainColor;
+    private Color m_tintColor;
+    public Color MainColor
+    {
+        get => m_mainColor;
+        set
+        {
+            m_mainColor = value;
+            SetState(m_currentSprite, m_currentContentDelta);
+        }
+    }
 
     private RectTransform m_content;
     public RectTransform Content => m_content;
@@ -22,6 +33,11 @@ public class NoodleButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     private Sprite m_currentSprite;
     private Vector2 m_currentContentDelta;
     private Sprite? m_overrideOverrideSprite;
+    
+    
+    private TMP_Text? m_tmpText;
+    public TMP_Text? Text => this.GetComponentInChildren(ref m_tmpText);
+
     public Sprite? OverrideSprite
     {
         get => m_overrideOverrideSprite;
@@ -54,17 +70,23 @@ public class NoodleButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         }
 
         m_image!.type = sprite.border.sqrMagnitude > 0.5 ? Image.Type.Sliced : Image.Type.Simple;
+        m_image!.color = m_mainColor + m_tintColor;
     }
 
     private void Init(Color color, Action onClick)
     {
-        MainColor = color;
+        m_mainColor = color;
         m_onClick = onClick;
         m_image = gameObject.AddComponent<Image>();
         m_image.color = MainColor;
         m_content = gameObject.RequireComponent<RectTransform>().AddChild().InsetBottom(DepressDeltaY);
         
         SetState(Globals.Assets.ButtonRaised, Vector2.zero);
+    }
+
+    public void SetOnClick(Action onClick)
+    {
+        m_onClick = onClick;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -74,14 +96,14 @@ public class NoodleButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (m_image != null)
-            m_image.color = MainColor + new Color(0.08f, 0.08f, 0.1f, 0.0f);
+        m_tintColor = new Color(0.08f, 0.08f, 0.1f, 0.0f);
+        SetState(m_currentSprite, m_currentContentDelta);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (m_image != null)
-            m_image.color = MainColor;
+        m_tintColor = new Color(0, 0, 0, 0);
+        SetState(m_currentSprite, m_currentContentDelta);
     }
 
     public void OnPointerDown(PointerEventData eventData)
