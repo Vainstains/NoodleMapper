@@ -46,7 +46,7 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
 
     protected override void BuildUI(RectTransform content)
     {
-        if (EditorManager.Instance.Map == null)
+        if (!EditorManager.NMEnabled)
         {
             EditorModMapManagerWindow.CloseUI();
             content.AddLabel("NM isn't enabled in this difficulty", 
@@ -106,16 +106,29 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
 
     private void BuildMapRangeEditor(NoodleVerticalLayout layout, MapData map)
     {
-        var list = layout.AddRow().AddList();
-
+        var list = layout.AddRow().AddRearrangeableList();
+        list.SetOnSwap((from, to) =>
+        {
+            var range = map.MapRanges[from];
+            map.MapRanges.RemoveAt(from);
+            map.MapRanges.Insert(to, range);
+        });
         for (var i = 0; i < map.MapRanges.Count; i++)
         {
             var range = map.MapRanges[i];
-            var itemRect = list.AddRow();
-
+            var itemContainer = list.AddItem();
+            
+            const int DesiredContentHeight = 26;
+            
+            var itemRect = itemContainer.Content.AddChild();
+            itemRect.anchorMin = new Vector2(0, 0.5f);
+            itemRect.anchorMax = new Vector2(1, 0.5f);
+            itemRect.pivot = new Vector2(0, 0.5f);
+            itemRect.sizeDelta = new Vector2(0, DesiredContentHeight);
+            
             var (innerItemRect, deleteRect) = itemRect.SplitHorizontal(1.0f, bias: -26);
             var (nameRect, (colorRect, (rangeRect, _))) = SplitRow(innerItemRect.InsetRight(4),
-                0.4f, 0.0f, 0.6f);
+                0.6f, 0.0f, 0.4f);
             
             var colorButton = colorRect.ExtendLeft(24).Move(-2, 0).AddButton(() => {});
             colorButton.MainColor = new Color(range.Color.r, range.Color.g, range.Color.b);
@@ -183,8 +196,8 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
                 });
             }).MainColor = new Color(0.7f, 0.1f, 0.3f);
         }
-
-        var endRow = list.AddRow();
+        layout.AddRow(2).AddGetBorder(RectTransform.Edge.Bottom).Move(0, 1);
+        var endRow = layout.AddRow();
         endRow.AddChild(RectTransform.Edge.Left).ExtendRight(50).AddButton("new...", AddNewMapRange);
         endRow.AddChild(RectTransform.Edge.Left).ExtendRight(50).Move(52, 0).AddButton("sort", SortMapRanges);
     }
@@ -218,8 +231,10 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
     
     private void AddNewMapRange()
     {
+        if (!EditorManager.NMEnabled)
+            return;
+        
         var map = EditorManager.Instance.Map;
-        if (map == null) return;
         
         int seed = Environment.TickCount + map.MapRanges.Count;
         s_colorRandom = new System.Random(seed);
@@ -244,8 +259,9 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
 
     private void SortMapRanges()
     {
+        if (!EditorManager.NMEnabled)
+            return;
         var map = EditorManager.Instance.Map;
-        if (map == null) return;
         
         map.MapRanges.Sort((a, b) => a.StartBeat.CompareTo(b.StartBeat));
         EditorGridAndTrackController.Instance.RefreshGridStuff();

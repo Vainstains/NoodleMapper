@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NoodleMapper.Map;
 using NoodleMapper.UI;
 using TMPro;
 using UnityEngine;
@@ -33,16 +34,12 @@ public class RangeBarController : MonoBehaviour
     private class CachedRangeBar
     {
         public RangeBar RangeBar;
-        public float Start;
-        public float End;
-        public bool EndIsEnabled;
+        public MapRange Range;
             
-        public CachedRangeBar(RangeBar rangeBar, float start, float end, bool endIsEnabled)
+        public CachedRangeBar(RangeBar rangeBar, MapRange range)
         {
             RangeBar = rangeBar;
-            Start = start;
-            End = end;
-            EndIsEnabled = endIsEnabled;
+            Range = range;
         }
     }
         
@@ -80,7 +77,6 @@ public class RangeBarController : MonoBehaviour
 
             var img = markerGo.GetComponent<Image>();
             img.raycastTarget = false;
-            img.sprite = Globals.Assets.Endpoint;
 
             var rect = img.rectTransform;
             rect.sizeDelta = new Vector2(0.45f, 0.45f);
@@ -128,7 +124,14 @@ public class RangeBarController : MonoBehaviour
         bar.Text = tmp;
             
         bar.StartMarker = CreateMarker("StartMarker");
+        bar.StartMarker.sprite = Globals.Assets.EndpointStart;
+        var rt = bar.StartMarker.rectTransform;
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.0f);
+        
         bar.EndMarker = CreateMarker("EndMarker");
+        bar.EndMarker.sprite = Globals.Assets.EndpointEnd;
+        rt = bar.EndMarker.rectTransform;
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1.0f);
             
         return bar;
     }
@@ -160,7 +163,7 @@ public class RangeBarController : MonoBehaviour
         RefreshPositions();
     }
         
-    public void UpdateRanges(IEnumerable<RawMapRange> ranges)
+    public void UpdateRanges(IEnumerable<MapRange> ranges)
     {
         m_init = false;
     
@@ -190,24 +193,20 @@ public class RangeBarController : MonoBehaviour
             {
                 rb = Instantiate(m_rangeBarPrefab, m_parent);
                 rb.gameObject.SetActive(true);
-                rb.StartMarker.transform.SetParent(m_parent, false);
-                rb.EndMarker.transform.SetParent(m_parent, false);
 
                 rb.StartMarker.gameObject.SetActive(true);
                 rb.EndMarker.gameObject.SetActive(true);
                     
                 label = rb.GetComponentInChildren<TextMeshProUGUI>();
                     
-                cachedBar = new CachedRangeBar(rb, start, end, range.EnableEndingEndpoint);
+                cachedBar = new CachedRangeBar(rb, range);
             }
         
-            // Update cached times
-            cachedBar.Start = start;
-            cachedBar.End = end;
+            cachedBar.Range = range;
         
             // Configure visuals
-            rb.BarImage.color = new Color(range.RangeColor.r, range.RangeColor.g, range.RangeColor.b, 0.2f);
-            label.text = range.Label;
+            rb.BarImage.color = new Color(range.Color.r, range.Color.g, range.Color.b, 0.2f);
+            label.text = range.Name;
         
             // Position using SongBpmTime
             PositionBar(cachedBar);
@@ -227,20 +226,14 @@ public class RangeBarController : MonoBehaviour
         float scale = EditorScaleController.EditorScale;
         var rect = bar.RangeBar.BarImage.rectTransform;
         var label = bar.RangeBar.Text;
-        float start = (float)m_song.Map.JsonTimeToSongBpmTime(bar.Start);
-        float end = (float)m_song.Map.JsonTimeToSongBpmTime(bar.End);
+        float start = (float)m_song.Map.JsonTimeToSongBpmTime(bar.Range.StartBeat);
+        float end = (float)m_song.Map.JsonTimeToSongBpmTime(bar.Range.EndBeat);
         float duration = end - start;
-            
-        // CRITICAL: Match MeasureLinesController EXACTLY
-        // Measure numbers are at X = -4.5 with pivot at center
-        // Let's put our bars at X = -2.0 (between measure numbers and notes)
-            
-        // Use the same positioning system as measure lines
+        
         rect.anchorMin = new Vector2(0, 0.5f);
         rect.anchorMax = new Vector2(0, 0.5f);
-        rect.pivot = new Vector2(0.5f, 0); // Pivot at bottom center
-            
-        // Position: X offset from left edge, Y = startTime * scale
+        rect.pivot = new Vector2(0.5f, 0);
+        
         rect.anchoredPosition = new Vector2(-0.27f, start * scale);
 
         float height = duration * scale;
@@ -256,30 +249,16 @@ public class RangeBarController : MonoBehaviour
             
         rect.sizeDelta = new Vector2(0.43f, finalHeight);
             
-        float markerX = -0.27f;
-            
-        float startY = start * scale;
-        float endY = end * scale;
-
-        var startRect = bar.RangeBar.StartMarker.rectTransform;
-        var endRect = bar.RangeBar.EndMarker.rectTransform;
-        startRect.SetParent(bar.RangeBar.BarImage.transform.parent);
-        endRect.SetParent(bar.RangeBar.BarImage.transform.parent);
-
-        startRect.anchoredPosition = new Vector2(markerX, startY);
-        endRect.anchoredPosition = new Vector2(markerX, endY);
-            
         var color = Color.Lerp(bar.RangeBar.BarImage.color, Color.white, 0.5f);
         color.a = 0.99f;
             
-        startRect.SetParent(bar.RangeBar.BarImage.transform);
-        endRect.SetParent(bar.RangeBar.BarImage.transform);
-            
         bar.RangeBar.StartMarker.color = color;
-
-        if (!bar.EndIsEnabled)
-            color.a = 0;
         bar.RangeBar.EndMarker.color = color;
+        
+        bool single = Mathf.Abs(bar.Range.StartBeat - bar.Range.EndBeat) < 0.01f;
+
+        bar.RangeBar.EndMarker.enabled = !single;
+        bar.RangeBar.StartMarker.sprite = single ? Globals.Assets.EndpointSingle : Globals.Assets.EndpointStart;
     }
         
     private void RefreshVisibility()
@@ -295,8 +274,8 @@ public class RangeBarController : MonoBehaviour
             
         foreach (var bar in m_rangeBars)
         {
-            float start = (float)m_song.Map.JsonTimeToSongBpmTime(bar.Start);
-            float end = (float)m_song.Map.JsonTimeToSongBpmTime(bar.End);
+            float start = (float)m_song.Map.JsonTimeToSongBpmTime(bar.Range.StartBeat);
+            float end = (float)m_song.Map.JsonTimeToSongBpmTime(bar.Range.EndBeat);
             // Check if bar is in visible range using SongBpmTime
             bool enabled = end >= currentTime - secondsBehind && 
                            start <= currentTime + secondsAhead;

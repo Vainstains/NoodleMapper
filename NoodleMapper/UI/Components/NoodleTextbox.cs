@@ -4,15 +4,19 @@ using NoodleMapper.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace NoodleMapper.UI.Components;
 
 public class NoodleTextbox : MonoBehaviour
 {
+    private static readonly Color OutlineColorIdle = new Color(0.33f, 0.33f, 0.33f);
+    private static readonly Color OutlineColorEditing = new Color(0.3f, 0.4f, 0.6f);
     public delegate void Setter(string? s);
 
     public TMP_InputField InputField = null!;
     public TMP_Text PlaceholderText = null!;
+    private Image m_outline = null!;
 
     public Setter? OnChange;
 
@@ -35,7 +39,7 @@ public class NoodleTextbox : MonoBehaviour
 
     public bool Modified => InputField.text != _value;
     
-    public static NoodleTextbox Create(RectTransform parent, bool tall = false)
+    public static NoodleTextbox Create(RectTransform parent)
     {
         var input = parent.AddInputFieldRaw("", "");
 
@@ -48,7 +52,18 @@ public class NoodleTextbox : MonoBehaviour
     private void Init(TMP_InputField field)
     {
         InputField = field;
+        
+        var text = InputField.textComponent;
         PlaceholderText = (TMP_Text)field.placeholder;
+
+        text.alignment = PlaceholderText.alignment = TextAlignmentOptions.Left;
+        var margin = text.margin;
+        margin.x += 4;
+        text.margin = margin;
+        
+        margin = PlaceholderText.margin;
+        margin.x += 4;
+        PlaceholderText.margin = margin;
 
         InputField.onSelect.AddListener(_ => StartEditing());
 
@@ -59,6 +74,10 @@ public class NoodleTextbox : MonoBehaviour
         });
 
         InputField.onDeselect.AddListener(_ => EndEditing());
+        
+        var rt = GetComponent<RectTransform>();
+
+        m_outline = rt.AddChild().AddImage(Globals.Assets.RoundRectBorderOnly, OutlineColorIdle).DisableRaycasts();
     }
 
     public NoodleTextbox Set(string? value, bool mixed, Setter setter)
@@ -99,6 +118,8 @@ public class NoodleTextbox : MonoBehaviour
             typeof(NoodleTextbox),
             ActionMapsDisabled
         );
+
+        m_outline.color = OutlineColorEditing;
     }
 
     private void EndEditing()
@@ -115,6 +136,8 @@ public class NoodleTextbox : MonoBehaviour
                 ActionMapsDisabled
             );
         }
+        
+        m_outline.color = OutlineColorIdle;
     }
 
     private void OnDestroy()

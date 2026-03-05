@@ -20,7 +20,15 @@ namespace NoodleMapper.Managers;
 public class EditorManager : ManagerBehaviour<EditorManager>
 {
     public MapData? Map { get; private set; } = null;
-    
+    public static bool NMEnabled
+    {
+        get
+        {
+            var info = BeatSaberSongContainer.Instance.MapDifficultyInfo;
+            return info.CustomData.TryGetString(JsonKeys.MapFile, out _);
+        }
+    }
+
     protected override void PostInit()
     {
         var info = BeatSaberSongContainer.Instance.MapDifficultyInfo;

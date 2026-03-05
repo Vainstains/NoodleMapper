@@ -53,6 +53,10 @@ public static class Globals
         
         [SpriteAsset] public static Sprite DragHandle = null!;
         [SpriteAsset] public static Sprite Endpoint = null!;
+        [SpriteAsset] public static Sprite EndpointStart = null!;
+        [SpriteAsset] public static Sprite EndpointEnd = null!;
+        [SpriteAsset] public static Sprite EndpointSingle = null!;
+        [SpriteAsset] public static Sprite TimelineEndpointSingle = null!;
         [SpriteAsset] public static Sprite EndpointExclusive = null!;
         
         [SpriteAsset] public static Sprite GotoArrow = null!;

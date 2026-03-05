@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NoodleMapper.EditorThings;
+using NoodleMapper.Map;
 using NoodleMapper.UI;
 using NoodleMapper.Utils;
 using UnityEngine;
@@ -34,19 +35,15 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
             m_rt = gameObject.RequireComponent<RectTransform>();
 
             m_barImage = m_rt.AddImage(null);
-            m_borderR = m_rt.AddGetBorder(RectTransform.Edge.Right, 1, new Color(1f, 1f, 1f, 0.4f))
+            m_borderR = m_rt.AddGetBorder(RectTransform.Edge.Right, 1, new Color(0.7f, 0.7f, 0.7f, 0.57f))
                 .Move(-1, 0).ExtendTop(1).ExtendBottom(1);
             m_borderL = m_rt.AddGetBorder(RectTransform.Edge.Left, 1, new Color(1f, 1f, 1f, 0.57f))
                 .Move(1, 0).ExtendTop(1).ExtendBottom(1);
             
             m_tooltip = gameObject.RequireComponent<Tooltip>();
 
-            m_singleDiamond = m_borderL.AddChildCenter().Extend(2f).AddImage(Globals.Assets.RoundRect);
-            m_singleDiamond.pixelsPerUnitMultiplier = 0.5f;
-            m_singleDiamond.rectTransform.AddChild().AddImage(Globals.Assets.RoundRectBorderOnly,
-                new(0, 0, 0, 0.8f)).pixelsPerUnitMultiplier = 0.5f;
+            m_singleDiamond = m_borderL.AddChildCenter().Extend(3f).AddImage(Globals.Assets.TimelineEndpointSingle);
             m_singleDiamond.rectTransform.eulerAngles = new Vector3(0f, 0f, 45f);
-            m_singleDiamond.rectTransform.AddChild().Inset(1.1f).AddImage(null, new(0, 0, 0, 0.8f));
             
             gameObject.SetActive(false);
         }
@@ -56,9 +53,12 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
             gameObject.SetActive(true);
             Debug.Log(atsc);
             Debug.Log(BeatSaberSongContainer.Instance.LoadedSong);
-            var maxBeat = atsc.GetBeatFromSeconds(BeatSaberSongContainer.Instance.LoadedSong.length);
-            float startRatio = StartBeat / maxBeat;
-            float endRatio = EndBeat / maxBeat;
+            var song = BeatSaberSongContainer.Instance.LoadedSong;
+            var map = BeatSaberSongContainer.Instance.Map;
+            var songLen = song.length;
+            
+            float startRatio = atsc.GetSecondsFromBeat((float)map.JsonTimeToSongBpmTime(StartBeat)) / songLen;
+            float endRatio = atsc.GetSecondsFromBeat((float)map.JsonTimeToSongBpmTime(EndBeat)) / songLen;
 
             m_rt.sizeDelta = Vector2.zero;
             m_rt.anchoredPosition = Vector2.zero;
@@ -75,7 +75,7 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
             
             m_tooltip.TooltipOverride = Name;
 
-            bool single = Mathf.Abs(EndBeat - StartBeat) < 0.01f;
+            bool single = Mathf.Abs(startRatio - endRatio) < 0.0005f;
             
             m_borderR.gameObject.SetActive(!single);
             m_singleDiamond.gameObject.SetActive(single);
@@ -102,8 +102,7 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
     {
         LoadedDifficultySelectController.LoadedDifficultyChangedEvent += DiffChanged;
         
-        var info = BeatSaberSongContainer.Instance.MapDifficultyInfo;
-        if (!info.CustomData.TryGetString(JsonKeys.MapFile, out _))
+        if (!EditorManager.NMEnabled)
             return;
         
         m_rangeBarController = RangeBarController.Create();
@@ -135,27 +134,19 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
         ResetFresh();
     }
     
-    private void SetRanges(IEnumerable<RawMapRange> ranges)
+    private void SetRanges(IEnumerable<MapRange> ranges)
     {
         m_rangeBarController.UpdateRanges(ranges);
     }
     
     public void RefreshGridStuff()
     {
-        var map = EditorManager.Instance.Map;
-        if (map == null)
+        if (!EditorManager.NMEnabled)
             return;
         
-        var starts = map.MapRanges.Select(r => r.StartBeat);
+        var map = EditorManager.Instance.Map;
         
-        SetRanges(map.MapRanges.Select(r => new RawMapRange
-        {
-            StartBeat = r.StartBeat,
-            EndBeat = r.EndBeat,
-            EnableEndingEndpoint = starts.All(s => Mathf.Abs(s - r.EndBeat) > 0.001f),
-            RangeColor = r.Color,
-            Label = r.Name
-        }));
+        SetRanges(map.MapRanges);
         
         m_rangeBarController.RefreshPositions();
         
@@ -186,8 +177,12 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
 
     private void GoToRange(TimelineRangeBar rangeBar, PointerEventData eventData)
     {
+        float goalBeat = rangeBar.StartBeat;
+        if (eventData.button == PointerEventData.InputButton.Right)
+            goalBeat = rangeBar.EndBeat;
+        
         m_tipc.PointerDown();
-        m_atsc.MoveToJsonTime(rangeBar.StartBeat);
+        m_atsc.MoveToJsonTime(goalBeat);
         m_tipc.PointerUp();
     }
 }

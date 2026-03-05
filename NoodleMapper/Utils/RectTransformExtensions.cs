@@ -245,8 +245,8 @@ public static class RectTransformExtensions
 
         var bg = (inputField.InputField.targetGraphic as Image)!;
 
-        bg.sprite = Globals.Assets.RoundRectBorderedSharp;
-        bg.color = new Color(0.35f, 0.35f, 0.35f);
+        bg.sprite = Globals.Assets.RoundRectBordered;
+        bg.color = new Color(0.30f, 0.30f, 0.30f);
 
         inputField.InputField.textViewport.Extend(4);
         inputField.InputField.SetTextWithoutNotify(defaultText);

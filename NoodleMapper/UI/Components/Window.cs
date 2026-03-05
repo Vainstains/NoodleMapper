@@ -19,7 +19,11 @@ public abstract class Window : MonoBehaviour
     private static readonly List<Window> s_windows = new ();
     protected RectTransform WindowRect = null!;
     private RectTransform m_contentRect = null!;
+    private Image m_resizeImg = null!;
     private const float TitleBarThickness = 24;
+    private ScrollRect? m_scrollRect;
+    
+    
     public abstract string WindowName { get; }
 
     protected abstract void BuildUI(RectTransform content);
@@ -33,7 +37,18 @@ public abstract class Window : MonoBehaviour
     private void RebuildUI()
     {
         CreateContentRect();
+        float scrollPos = 0;
+        if (m_scrollRect)
+        {
+            scrollPos = m_scrollRect.verticalNormalizedPosition;
+        }
         BuildUI(m_contentRect);
+        if (m_scrollRect)
+        {
+            m_scrollRect.verticalNormalizedPosition = scrollPos;
+        }
+                
+        m_resizeImg.transform.SetAsLastSibling();
     }
     
     protected void SetPositionDirty()
@@ -64,11 +79,13 @@ public abstract class Window : MonoBehaviour
         ));
     }
 
-    protected static void SetupScrolling(ref RectTransform content)
+    protected void SetupScrolling(ref RectTransform content)
     {
         content = content.AddVerticalScrollView(out var scrollRect);
         // give 12px of extra space on the bottom right to avoid obscuring the size handle
         scrollRect.verticalScrollbar.RequireComponent<RectTransform>().InsetBottom(12);
+        
+        m_scrollRect = scrollRect;
     }
 
     private void CreateContentRect()
@@ -117,8 +134,8 @@ public abstract class Window : MonoBehaviour
         titleBarDraggerRect.AddChild().InsetLeft(3).AddLabel(WindowName);
 
         var lowerCorner = WindowRect.AddChildBottomRight().ExtendLeft(16).ExtendTop(16);
-        lowerCorner.AddImage(Globals.Assets.WindowCorner);
-        lowerCorner.AddDragHandler().SetOnDrag((PointerEventData e) =>
+        m_resizeImg = lowerCorner.AddImage(Globals.Assets.WindowCorner);
+        lowerCorner.AddChild().Extend(2).AddClearImage().rectTransform.AddDragHandler().SetOnDrag((PointerEventData e) =>
         {
             var offsetMax = WindowRect.offsetMax;
             offsetMax.x += e.delta.x;
