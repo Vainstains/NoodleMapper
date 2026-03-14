@@ -102,8 +102,11 @@
         <Compile Include="Managers\ManagerBehaviour.cs" />
         <Compile Include="Managers\SceneManagers.cs" />
         <Compile Include="Managers\SongEditorManager.cs" />
+        <Compile Include="Managers\SongSelectManager.cs" />
         <Compile Include="Managers\Windows\EditorMainWindow.cs" />
         <Compile Include="Managers\Windows\EditorModMapManagerWindow.cs" />
+        <Compile Include="Managers\Windows\GitCloneWindow.cs" />
+        <Compile Include="Managers\Windows\GitWindow.cs" />
         <Compile Include="Managers\Windows\SongEditorWindow.cs" />
         <Compile Include="Map\MapData.cs" />
         <Compile Include="Map\MapRange.cs" />
@@ -132,6 +135,7 @@
         <Compile Include="Utils\AddInitComponentExtensions.cs" />
         <Compile Include="Utils\CMCanvasGroup.cs" />
         <Compile Include="Utils\Data.cs" />
+        <Compile Include="Utils\GitRunner.cs" />
         <Compile Include="Utils\Helpers.cs" />
         <Compile Include="Utils\JSONExtensions.cs" />
         <Compile Include="Utils\JsonKeys.cs" />

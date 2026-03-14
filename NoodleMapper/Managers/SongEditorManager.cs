@@ -53,12 +53,21 @@ public class SongEditorManager : ManagerBehaviour<SongEditorManager>
     {
         var container = GameObject.Find("SongInfoPanel").RequireComponent<RectTransform>();
 
-        var buttonRect = container.AddChildBottomRight().IgnoreLayout().Move(-2, 2)
+        // ── NoodleMapper button (rightmost) ─────────────────────────────────
+        var nmButtonRect = container.AddChildBottomRight().IgnoreLayout().Move(-2, 2)
             .ExtendTop(20).ExtendLeft(90);
-        buttonRect.AddInitComponent<NoodleButton>(new Color(0.4f, 0.4f, 0.4f), () =>
+        nmButtonRect.AddInitComponent<NoodleButton>(new Color(0.4f, 0.4f, 0.4f), () =>
         {
             SongEditorWindow.ToggleUI();
         }).Content.AddLabel("NoodleMapper", TextAlignmentOptions.Center, fontSize: 16);
+
+        // ── Git button (immediately to the left, 4 px gap) ──────────────────
+        // NM button occupies x: [-92 .. -2], so Git button starts at -96 and extends left by 46.
+        var gitButtonRect = container.AddChildBottomRight().IgnoreLayout().Move(-96, 2)
+            .ExtendTop(20).ExtendLeft(46);
+        gitButtonRect.AddInitComponent<NoodleButton>(new Color(0.3f, 0.35f, 0.5f), () =>
+        {
+            GitWindow.ToggleUI();
+        }).Content.AddLabel("Git", TextAlignmentOptions.Center, fontSize: 16);
     }
 }
-
