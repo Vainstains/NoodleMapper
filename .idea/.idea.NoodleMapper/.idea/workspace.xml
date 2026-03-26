@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0e7cf902-1cb8-42ec-972f-815132acf7c2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/VainMapper/Managers/RebootManager.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VainMapper/Utils/JsonKeys.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VainMapper/Utils/Rebooter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VainMapper/Utils/Settings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.NoodleMapper/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.NoodleMapper/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.NoodleMapper/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.NoodleMapper/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper.sln" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper.sln.DotSettings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper.sln.DotSettings.user" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/EditorThings/RangeBarController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/EditorThings/RangeBarController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/EditorThings/RawMapRange.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/EditorThings/RawMapRange.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/EditorGridAndTrackController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/EditorGridAndTrackController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/EditorManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/EditorManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/ManagerBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/ManagerBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/SceneManagers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/SceneManagers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/SongEditorManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/SongEditorManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/SongSelectManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/SongSelectManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/Windows/EditorMainWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/Windows/EditorMainWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/Windows/EditorModMapManagerWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/Windows/EditorModMapManagerWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/Windows/GitCloneWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/Windows/GitCloneWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/Windows/GitWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/Windows/GitWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Managers/Windows/SongEditorWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Managers/Windows/SongEditorWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Map/MapData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Map/MapData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Map/MapRange.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Map/MapRange.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/ModMap/AssignTrackProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/ModMap/AssignTrackProcessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/ModMap/HandType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/ModMap/HandType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/ModMap/HandTypeFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/ModMap/HandTypeFilter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/ModMap/INoodleFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/ModMap/INoodleFilter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/ModMap/INoodleSpanProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/ModMap/INoodleSpanProcessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/ModMap/ModMapData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/ModMap/ModMapData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/ModMap/NoodleSpan.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/ModMap/NoodleSpan.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/ModMap/UnknownFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/ModMap/UnknownFilter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/NoodleMapper.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/VainMapper.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/NoodleMapperPlugin.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Properties/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Properties/AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/ButtonDepressed.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/ButtonDepressed.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/ButtonRaised.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/ButtonRaised.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/CloseButton.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/CloseButton.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/DragHandle.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/DragHandle.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/Endpoint.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/Endpoint.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/EndpointEnd.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/EndpointEnd.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/EndpointExclusive.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/EndpointExclusive.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/EndpointSingle.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/EndpointSingle.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/EndpointStart.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/EndpointStart.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/ExtensionButtonIcon.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/ExtensionButtonIcon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/GotoArrow.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/GotoArrow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/RoundRect.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/RoundRect.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/RoundRectBorderOnly.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/RoundRectBorderOnly.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/RoundRectBordered.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/RoundRectBordered.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/RoundRectBorderedSharp.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/RoundRectBorderedSharp.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/Shadow.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/Shadow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/TimelineEndpointSingle.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/TimelineEndpointSingle.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/TitleBar.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/TitleBar.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Resources/WindowCorner.png" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Resources/WindowCorner.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/DragHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/DragHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/NoodleButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/NoodleButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/NoodleDropdown.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/NoodleDropdown.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/NoodleList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/NoodleList.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/NoodleRearrangeableList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/NoodleRearrangeableList.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/NoodleTextbox.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/NoodleTextbox.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/NoodleToggle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/NoodleToggle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/NoodleVerticalLayout.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/NoodleVerticalLayout.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/Window.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/Window.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Components/WindowContainer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Components/WindowContainer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/GenericWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/GenericWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/UI/Globals.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/UI/Globals.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/AddInitComponentExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/AddInitComponentExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/CMCanvasGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/CMCanvasGroup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/Data.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/GitRunner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/GitRunner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/Helpers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/Helpers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/JSONExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/JSONExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/JsonKeys.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/RectTransformExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/RectTransformExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/Scenes/CMScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/Scenes/CMScene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/Scenes/SceneUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/Scenes/SceneUtils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/Settings.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Utils/UnityComponentHelpers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Utils/UnityComponentHelpers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NoodleMapper/Wiring/OnPluginInitAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/VainMapper/Wiring/OnPluginInitAttribute.cs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="autoShow" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JSON File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Vainstains&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Vainstains/NoodleMapper.git&quot;,
+    &quot;accountId&quot;: &quot;7bbc85c8-2303-48d9-8599-9c2ae27c3545&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2ecb5561320c47a08d57d6e2820c3cc71376b8/61/9c267037/Vector4.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2ecb5561320c47a08d57d6e2820c3cc71376b8/91/f61ce336/UnityEvent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2ecb5561320c47a08d57d6e2820c3cc71376b8/d0/d2102b8b/SceneManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2ecb5561320c47a08d57d6e2820c3cc71376b8/e4/3b7136b3/UnityEventBase.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/401d46ae6ad748a596e3addc4a1104971d000/9e/45079ab4/JSONObject.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/401d46ae6ad748a596e3addc4a1104971d000/b4/1c478bf5/JSONNode.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a10d400/01/992d6e6d/PauseManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a10d400/34/51d31711/EditorScaleController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a10d400/76/a66fbe98/SongInfoEditUI.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a10d400/96/cda5c527/LoadedDifficultySelectController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a10d400/c1/56f8eeb5/BeatSaberSongContainer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a10d400/dc/441c5fb8/BaseDifficulty.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a10d400/f5/d4d7e937/PersistentUI.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/49/7a2f699e/BaseDifficulty.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/70/598b34dc/BaseNote.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/73/ee06c94f/BeatSaberSongContainer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/97/8a34a1b0/Settings.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/a7/d9798a94/BaseGrid.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/d2/79fcfdee/ExtensionButtons.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/d6/a177486a/BaseObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/dd/939b59bc/DifficultySelect.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/dd/a7a609d9/BeatmapObjectContainerCollection.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b452f4bc93194f9b8ac8e769b27d2f0a110c00/e7/40e82298/InfoDifficulty.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b9bd12858a934a059968087ac30978735a600/7e/af360d2b/TMP_Text.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec289afdbc084c618744f0b563e987e13c800/15/1205d88d/ScrollRect.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec289afdbc084c618744f0b563e987e13c800/89/c5557acb/Graphic.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec289afdbc084c618744f0b563e987e13c800/93/aa0bf72a/MaskableGraphic.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec289afdbc084c618744f0b563e987e13c800/c8/94592c11/Image.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f2e31cc6137b4ed1800f8f1fff88ed5386b8/83/36b649d5/CanvasRenderer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Managers/EditorManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Managers/ManagerBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Managers/RebootManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Managers/SongEditorManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Managers/Windows/EditorMainWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Managers/Windows/SongEditorWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/ModMap/AssignTrackProcessor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/ModMap/INoodleFilter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/NoodleMapperPlugin.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/UI/Components/DragHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/UI/Components/WindowContainer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Utils/Helpers.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Utils/Rebooter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/NoodleMapper/Utils/RectTransformExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="SWEA" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="39UPdQOOxcZMMB3pun6U7BekLAu" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Standalone Player.Unnamed.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;TEXT&quot;
+    ]
+  }
+}</component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Unnamed" type="RunUnityExe" factoryName="Unity Executable" nameIsGenerated="true">
+      <option name="EXE_PATH" value="$USER_HOME$/Programs/Chromapper/chromapper/ChroMapper.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Programs/Chromapper/chromapper" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2">
+        <option name="Build Solution" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Attach to Unity Editor.Attach to Unity Editor" />
+      <item itemvalue="Standalone Player.Unnamed" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0e7cf902-1cb8-42ec-972f-815132acf7c2" name="Changes" comment="" />
+      <created>1770747763477</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770747763477</updated>
+      <workItem from="1770747764635" duration="289000" />
+      <workItem from="1770748066958" duration="45403000" />
+      <workItem from="1770861032518" duration="61714000" />
+      <workItem from="1771438898980" duration="357000" />
+      <workItem from="1771439278511" duration="29569000" />
+      <workItem from="1771526295888" duration="2400000" />
+      <workItem from="1771529748874" duration="6420000" />
+      <workItem from="1772748428498" duration="317000" />
+      <workItem from="1773442792324" duration="2514000" />
+      <workItem from="1773445396154" duration="6644000" />
+      <workItem from="1774372459970" duration="12530000" />
+      <workItem from="1774542686867" duration="6959000" />
+      <workItem from="1774552643190" duration="181000" />
+      <workItem from="1774553796783" duration="1203000" />
+    </task>
+    <task id="LOCAL-00001" summary="add image">
+      <option name="closed" value="true" />
+      <created>1770770382900</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1770770382900</updated>
+    </task>
+    <task id="LOCAL-00002" summary="tcyguvk">
+      <option name="closed" value="true" />
+      <created>1770770396154</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1770770396154</updated>
+    </task>
+    <task id="LOCAL-00003" summary="hhh">
+      <option name="closed" value="true" />
+      <created>1770823359347</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1770823359347</updated>
+    </task>
+    <task id="LOCAL-00004" summary="gvkkvg hkg">
+      <option name="closed" value="true" />
+      <created>1770876577283</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1770876577283</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Get the difficulty switcher thing working">
+      <option name="closed" value="true" />
+      <created>1770877342153</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1770877342153</updated>
+    </task>
+    <task id="LOCAL-00006" summary="ch,">
+      <option name="closed" value="true" />
+      <created>1770877474078</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1770877474078</updated>
+    </task>
+    <task id="LOCAL-00007" summary="gvuihbhbgv">
+      <option name="closed" value="true" />
+      <created>1770933607383</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1770933607383</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Track ranges and rearrangeable list">
+      <option name="closed" value="true" />
+      <created>1770965583469</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1770965583469</updated>
+    </task>
+    <task id="LOCAL-00009" summary="much more stuff">
+      <option name="closed" value="true" />
+      <created>1771480513741</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1771480513741</updated>
+    </task>
+    <task id="LOCAL-00010" summary="add comment bc yeah">
+      <option name="closed" value="true" />
+      <created>1771480768210</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1771480768210</updated>
+    </task>
+    <task id="LOCAL-00011" summary="git stuff owo">
+      <option name="closed" value="true" />
+      <created>1773448970963</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773448970963</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnityProjectDiscoverer">
+    <option name="hasUnityReference" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="add image" />
+    <MESSAGE value="tcyguvk" />
+    <MESSAGE value="hhhh" />
+    <MESSAGE value="hhh" />
+    <MESSAGE value="gvkkvg hkg" />
+    <MESSAGE value="Get the difficulty switcher thing working" />
+    <MESSAGE value="ch," />
+    <MESSAGE value="gvuihbhbgv" />
+    <MESSAGE value="Track ranges and rearrangeable list" />
+    <MESSAGE value="much more stuff" />
+    <MESSAGE value="add comment bc yeah" />
+    <MESSAGE value="git stuff owo" />
+    <option name="LAST_COMMIT_MESSAGE" value="git stuff owo" />
+  </component>
+</project>

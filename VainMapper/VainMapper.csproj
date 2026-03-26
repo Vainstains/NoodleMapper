@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="..\packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props" Condition="Exists('..\packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{7E3FC87B-50F0-42EA-9CF9-11CE0530B6ED}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>NoodleMapper</RootNamespace>
+        <AssemblyName>VainMapper</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Publicize Include="Main" />
+        <Reference Include="Main">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\Main.dll</HintPath>
+        </Reference>
+        <Reference Include="Input">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\Input.dll</HintPath>
+        </Reference>
+        <Reference Include="LiteNetLib">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\LiteNetLib.dll</HintPath>
+        </Reference>
+        <Reference Include="Plugins">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\Plugins.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.UI.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UIModule">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestModule">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Unity.InputSystem">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\Unity.InputSystem.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.ImageConversionModule">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="0Harmony">
+            <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\0Harmony.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="EditorThings\RangeBarController.cs" />
+        <Compile Include="EditorThings\RawMapRange.cs" />
+        <Compile Include="Managers\EditorGridAndTrackController.cs" />
+        <Compile Include="Managers\EditorManager.cs" />
+        <Compile Include="Managers\ManagerBehaviour.cs" />
+        <Compile Include="Managers\RebootManager.cs" />
+        <Compile Include="Managers\SceneManagers.cs" />
+        <Compile Include="Managers\SongEditorManager.cs" />
+        <Compile Include="Managers\SongSelectManager.cs" />
+        <Compile Include="Managers\Windows\EditorMainWindow.cs" />
+        <Compile Include="Managers\Windows\EditorModMapManagerWindow.cs" />
+        <Compile Include="Managers\Windows\GitCloneWindow.cs" />
+        <Compile Include="Managers\Windows\GitWindow.cs" />
+        <Compile Include="Managers\Windows\SongEditorWindow.cs" />
+        <Compile Include="Map\MapData.cs" />
+        <Compile Include="Map\MapRange.cs" />
+        <Compile Include="ModMap\AssignTrackProcessor.cs" />
+        <Compile Include="ModMap\HandType.cs" />
+        <Compile Include="ModMap\HandTypeFilter.cs" />
+        <Compile Include="ModMap\INoodleFilter.cs" />
+        <Compile Include="ModMap\INoodleSpanProcessor.cs" />
+        <Compile Include="ModMap\ModMapData.cs" />
+        <Compile Include="ModMap\NoodleSpan.cs" />
+        <Compile Include="ModMap\UnknownFilter.cs" />
+        <Compile Include="VainMapperPlugin.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="UI\Components\DragHandler.cs" />
+        <Compile Include="UI\Components\NoodleButton.cs" />
+        <Compile Include="UI\Components\NoodleDropdown.cs" />
+        <Compile Include="UI\Components\NoodleList.cs" />
+        <Compile Include="UI\Components\NoodleRearrangeableList.cs" />
+        <Compile Include="UI\Components\NoodleTextbox.cs" />
+        <Compile Include="UI\Components\NoodleToggle.cs" />
+        <Compile Include="UI\Components\NoodleVerticalLayout.cs" />
+        <Compile Include="UI\Components\Window.cs" />
+        <Compile Include="UI\Components\WindowContainer.cs" />
+        <Compile Include="UI\GenericWindow.cs" />
+        <Compile Include="UI\Globals.cs" />
+        <Compile Include="Utils\AddInitComponentExtensions.cs" />
+        <Compile Include="Utils\CMCanvasGroup.cs" />
+        <Compile Include="Utils\GitRunner.cs" />
+        <Compile Include="Utils\Helpers.cs" />
+        <Compile Include="Utils\JSONExtensions.cs" />
+        <Compile Include="Utils\JsonKeys.cs" />
+        <Compile Include="Utils\Rebooter.cs" />
+        <Compile Include="Utils\RectTransformExtensions.cs" />
+        <Compile Include="Utils\Scenes\CMScene.cs" />
+        <Compile Include="Utils\Scenes\SceneUtils.cs" />
+        <Compile Include="Utils\Settings.cs" />
+        <Compile Include="Utils\UnityComponentHelpers.cs" />
+        <Compile Include="Wiring\OnPluginInitAttribute.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Resources\" />
+      <EmbeddedResource Include="Resources\*.png" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="xcopy /Y /F &quot;$(ProjectDir)bin\$(Configuration)\$(TargetName).dll&quot; &quot;$(ChroMapperDir)\Plugins\&quot;" />
+        <Exec Condition=" '$(Configuration)' == 'Debug' " Command="xcopy /Y /F &quot;$(ProjectDir)bin\$(Configuration)\$(TargetName).pdb&quot; &quot;$(ChroMapperDir)\Plugins\&quot;" />
+    </Target>
+    
+    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+      <PropertyGroup>
+        <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+      </PropertyGroup>
+      <Error Condition="!Exists('..\packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props'))" />
+      <Error Condition="!Exists('..\packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets'))" />
+    </Target>
+    <Import Project="..\packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets" Condition="Exists('..\packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets')" />
+
+</Project>
