@@ -1,8 +1,8 @@
-﻿using VainMapper.Utils;
-using UnityEngine;
-using VainMapper.UI.Components;
+﻿using UnityEngine;
+using VainLib.UI.Components;
+using VainLib.Utils;
 
-namespace VainMapper.Managers;
+namespace VainLib.Scenes;
 
 public abstract class ManagerBehaviour<T> : MonoBehaviour where T : ManagerBehaviour<T>
 {

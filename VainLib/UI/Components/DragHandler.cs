@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace VainMapper.UI.Components;
+namespace VainLib.UI.Components;
 
 public class DragHandler : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {

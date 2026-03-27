@@ -1,19 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Beatmap.Base;
+﻿using System.IO;
 using Beatmap.Helper;
-using HarmonyLib;
 using VainMapper.ModMap;
-using VainMapper.UI.Components;
 using SimpleJSON;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using VainLib.Scenes;
 using VainMapper.Managers.Windows;
 using VainMapper.Map;
 using VainMapper.UI;
 using VainMapper.Utils;
-using VainMapper.Wiring;
 using Object = UnityEngine.Object;
 
 namespace VainMapper.Managers;
@@ -126,47 +120,5 @@ public class EditorManager : ManagerBehaviour<EditorManager>
             Data = new ModMapData()
         };
         modMapFile.Save();
-    }
-}
-
-internal static class InputInstaller
-{
-    [OnPluginInit]
-    private static void Init()
-    {
-        var map = CMInputCallbackInstaller.InputInstance.asset.actionMaps
-            .Where(x => x.name == "Node Editor")
-            .FirstOrDefault();
-        CMInputCallbackInstaller.InputInstance.Disable();
-			
-        var toggleWindow = map.AddAction("NoodleEditor Window", type: InputActionType.Button);
-        toggleWindow.AddCompositeBinding("ButtonWithOneModifier")
-            .With("Modifier", "<Keyboard>/ctrl")
-            .With("Button", "<Keyboard>/n");
-			
-        CMInputCallbackInstaller.InputInstance.Enable();
-        
-        
-        toggleWindow!.performed += EditorMainWindow.OnToggleWindow;
-    }
-}
-
-[HarmonyPatch]
-class EditorPatches
-{
-    public static event Action OnSavingDiff;
-    
-    [HarmonyPatch(typeof(BaseDifficulty), nameof(BaseDifficulty.Save))]
-    [HarmonyPrefix]
-    static void Save()
-    {
-        OnSavingDiff?.Invoke();
-    }
-
-    [HarmonyPatch(typeof(BPMChangeGridContainer), nameof(BPMChangeGridContainer.RefreshModifiedBeat))]
-    [HarmonyPostfix]
-    static void BPMRefresh()
-    {
-        EditorGridAndTrackController.Instance.RefreshGridStuff();
     }
 }

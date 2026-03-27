@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using VainMapper.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using VainMapper.UI.Components;
-using VainMapper.Utils.Scenes;
-using VainMapper.Wiring;
+using VainLib.UI.Components;
+using VainLib.Utils;
 
-namespace VainMapper.Managers;
+namespace VainLib.Scenes;
 
 public static class SceneManagers
 {
@@ -53,9 +51,8 @@ public static class SceneManagers
         s_managers.Add(registration);
         return registration;
     }
-
-    [OnPluginInit]
-    private static void OnPluginInit()
+    
+    internal static void InitializeSceneStuff()
     {
         SceneManager.sceneLoaded += SceneLoaded;
     }

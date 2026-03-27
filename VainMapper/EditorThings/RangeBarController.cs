@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VainLib.UI;
 using VainMapper.Map;
 using VainMapper.UI;
 
@@ -124,12 +125,12 @@ public class RangeBarController : MonoBehaviour
         bar.Text = tmp;
             
         bar.StartMarker = CreateMarker("StartMarker");
-        bar.StartMarker.sprite = PluginResources.LoadSprite("Resources/EndpointStart.png");
+        bar.StartMarker.sprite = DefaultResources.LoadSprite("Resources/EndpointStart.png");
         var rt = bar.StartMarker.rectTransform;
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.0f);
         
         bar.EndMarker = CreateMarker("EndMarker");
-        bar.EndMarker.sprite = PluginResources.LoadSprite("Resources/EndpointEnd.png");
+        bar.EndMarker.sprite = DefaultResources.LoadSprite("Resources/EndpointEnd.png");
         rt = bar.EndMarker.rectTransform;
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1.0f);
             
@@ -259,8 +260,8 @@ public class RangeBarController : MonoBehaviour
 
         bar.RangeBar.EndMarker.enabled = !single;
         bar.RangeBar.StartMarker.sprite = single
-            ? PluginResources.LoadSprite("Resources/EndpointSingle.png")
-            : PluginResources.LoadSprite("Resources/EndpointStart.png");
+            ? DefaultResources.LoadSprite("Resources/EndpointSingle.png")
+            : DefaultResources.LoadSprite("Resources/EndpointStart.png");
     }
         
     private void RefreshVisibility()

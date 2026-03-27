@@ -3,6 +3,7 @@ using UnityEngine;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
 using VainLib.Data;
+using VainLib.Scenes;
 
 namespace VainLib;
 
@@ -19,21 +20,7 @@ public class Plugin
         new Harmony(ID)
             .PatchAll(Assembly.GetExecutingAssembly());
 
-        Debug.Log($"Hello from {Name}!");
+        SceneManagers.InitializeSceneStuff();
         Testing.Test();
     }
-}
-
-public enum CMScene
-{
-    FirstBoot = 0,
-    SongSelectMenu = 1,
-    SongEditMenu = 2,
-    Mapper = 3,
-    Options = 4
-}
-
-public static class CMSceneExtensions
-{
-    public static Scene GetUnityScene(this CMScene scene) => SceneManager.GetSceneByBuildIndex((int)scene);
 }

@@ -49,6 +49,7 @@ public class EmbeddedResourceLocation : IResourceLocation
     public bool TryGetStream(string path, out Stream stream)
     {
         var resourcePath = ConvertFilePathToResourcePath(path);
+        Debug.Log($"Loading stream from `{resourcePath}`");
         if (!m_paths.Contains(resourcePath))
         {
             stream = null!;

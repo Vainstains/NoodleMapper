@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using VainMapper.Utils;
 using UnityEngine;
 using UnityEngine.UI;
-using VainMapper.Utils.Scenes;
+using VainLib.Scenes;
+using VainLib.Utils;
 
-namespace VainMapper.UI.Components;
+namespace VainLib.UI.Components;
 
 public class WindowContainer : MonoBehaviour
 {

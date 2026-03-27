@@ -1,8 +1,8 @@
-﻿using VainMapper.Utils;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using VainLib.Utils;
 
-namespace VainMapper.UI.Components;
+namespace VainLib.UI.Components;
 
 public class NoodleToggle : MonoBehaviour
 {
@@ -28,9 +28,9 @@ public class NoodleToggle : MonoBehaviour
         {
             IsOn = !IsOn;
             m_setter?.Invoke(IsOn);
-        }).OverrideSprite = PluginResources.LoadSprite("Resources/RoundRectBorderedSharp.png");
+        }).OverrideSprite = DefaultResources.LoadSprite("Resources/RoundRectBorderedSharp.png");
         var rt = gameObject.RequireComponent<RectTransform>();
-        m_imageToEnable = rt.AddChildCenter().Extend(8).AddImage(PluginResources.LoadSprite("Resources/RoundRect.png"));
+        m_imageToEnable = rt.AddChildCenter().Extend(8).AddImage(DefaultResources.LoadSprite("Resources/RoundRect.png"));
         IsOn = false;
     }
 

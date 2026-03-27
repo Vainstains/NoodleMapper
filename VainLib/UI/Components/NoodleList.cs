@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using VainMapper.Utils;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using VainLib.Utils;
 
-namespace VainMapper.UI.Components;
+namespace VainLib.UI.Components;
 
 public class NoodleList : MonoBehaviour
 {

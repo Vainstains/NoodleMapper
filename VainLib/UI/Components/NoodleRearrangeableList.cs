@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using VainMapper.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using VainLib.Utils;
 
-namespace VainMapper.UI.Components;
+namespace VainLib.UI.Components;
 
 /// <summary>
 /// Sorta like a list, but items can be dragged on the vertical axis by a small handle on the left side,
@@ -45,13 +44,13 @@ public class NoodleRearrangeableList : MonoBehaviour
             m_rt.sizeDelta = new Vector2(0, height);
 
             // background
-            BG = m_rt.AddChild().AddImage(PluginResources.LoadSprite("Resources/RoundRectBordered.png"), new Color(0.3f, 0.3f, 0.3f))
+            BG = m_rt.AddChild().AddImage(DefaultResources.LoadSprite("Resources/RoundRectBordered.png"), new Color(0.3f, 0.3f, 0.3f))
                 .DisableRaycasts().RequireComponent<RectTransform>();
 
             
             m_handle = BG.AddChild(RectTransform.Edge.Left).ExtendRight(HandleWidth);
             m_handle.AddClearImage();
-            m_handle.AddSpriteImage(PluginResources.LoadSprite("Resources/DragHandle.png"), new Color(0, 0, 0, 0.7f));
+            m_handle.AddSpriteImage(DefaultResources.LoadSprite("Resources/DragHandle.png"), new Color(0, 0, 0, 0.7f));
 
             m_drag = m_handle.AddDragHandler()
                 .SetOnBeginDrag(OnBeginDrag)

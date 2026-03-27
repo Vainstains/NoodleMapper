@@ -4,9 +4,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using VainLib.UI;
+using VainLib.UI.Components;
+using VainLib.Utils;
 using VainMapper.Map;
 using VainMapper.UI;
-using VainMapper.UI.Components;
 using VainMapper.Utils;
 using Random = UnityEngine.Random;
 

@@ -6,7 +6,6 @@ using UnityEngine;
 using VainLib.Data;
 using VainLib.IO;
 using VainMapper.Managers;
-using VainMapper.Wiring;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 

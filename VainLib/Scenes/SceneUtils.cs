@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using VainMapper.Wiring;
 using UnityEngine.SceneManagement;
 
-namespace VainMapper.Utils.Scenes;
+namespace VainLib.Scenes;
 
 public static class SceneUtils
 {

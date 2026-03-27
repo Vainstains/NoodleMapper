@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using VainMapper.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using VainLib.Utils;
 
-namespace VainMapper.UI.Components;
+namespace VainLib.UI.Components;
 
 public class NoodleTextbox : MonoBehaviour
 {
@@ -78,7 +78,7 @@ public class NoodleTextbox : MonoBehaviour
         var rt = GetComponent<RectTransform>();
 
         m_outline = rt.AddChild()
-            .AddImage(PluginResources.LoadSprite("Resources/RoundRectBorderOnly.png"), OutlineColorIdle)
+            .AddImage(DefaultResources.LoadSprite("Resources/RoundRectBorderOnly.png"), OutlineColorIdle)
             .DisableRaycasts();
     }
 

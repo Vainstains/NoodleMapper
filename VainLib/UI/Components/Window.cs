@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Beatmap.Base;
-using HarmonyLib;
-using VainMapper.Managers;
-using SimpleJSON;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using VainMapper.Utils;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
+using VainLib.Utils;
 
-namespace VainMapper.UI.Components;
-using Settings = VainMapper.Utils.Settings;
+namespace VainLib.UI.Components;
+using Settings = Utils.Settings;
 
 public abstract class Window : MonoBehaviour
 {
@@ -26,6 +20,7 @@ public abstract class Window : MonoBehaviour
     
     
     public abstract string WindowName { get; }
+    private string WindowKey => $"{GetType().AssemblyQualifiedName}:{WindowName}";
 
     protected abstract void BuildUI(RectTransform content);
 
@@ -60,7 +55,7 @@ public abstract class Window : MonoBehaviour
     
     protected void LoadPosition()
     {
-        if (!Settings.Windows.TryGetValue($"(Window) {WindowName}", out var pos))
+        if (!Settings.Windows.TryGetValue(WindowKey, out var pos))
             pos = new Vector4(
                 50, -20,
                 400, 300
@@ -73,7 +68,7 @@ public abstract class Window : MonoBehaviour
 
     protected void SavePosition()
     {
-        Settings.Windows[$"(Window) {WindowName}"] = new Vector4(
+        Settings.Windows[WindowKey] = new Vector4(
             WindowRect.anchoredPosition.x,
             WindowRect.anchoredPosition.y,
             WindowRect.sizeDelta.x,
@@ -101,7 +96,7 @@ public abstract class Window : MonoBehaviour
     
     private void Init()
     {
-        var shadowSprite = PluginResources.LoadSprite("Resources/Shadow.png");
+        var shadowSprite = DefaultResources.LoadSprite("Resources/Shadow.png");
         float shadowRadius = shadowSprite.texture.width * 0.5f;
         var shadowImg = WindowRect.AddChild().Extend(shadowRadius * 0.85f).InsetTop(shadowRadius * 0.1f).AddImage(
             shadowSprite,
@@ -109,15 +104,15 @@ public abstract class Window : MonoBehaviour
         shadowImg.raycastTarget = false;
         
         var bg = WindowRect.AddChild().AddImage(
-            PluginResources.LoadSprite("Resources/RoundRect.png"),
+            DefaultResources.LoadSprite("Resources/RoundRect.png"),
             new Color(0.22f, 0.22f, 0.22f));
         var titleBar = WindowRect.AddChild(RectTransform.Edge.Top).ExtendBottom(TitleBarThickness);
         var titleBarImg = titleBar.AddImage(
-            PluginResources.LoadSprite("Resources/TitleBar.png"),
+            DefaultResources.LoadSprite("Resources/TitleBar.png"),
             new Color(0.35f, 0.35f, 0.35f));
 
         WindowRect.AddChild().AddImage(
-            PluginResources.LoadSprite("Resources/RoundRectBorderOnly.png"),
+            DefaultResources.LoadSprite("Resources/RoundRectBorderOnly.png"),
             new Color(0.4f, 0.4f, 0.4f)).DisableRaycasts();
 
         var titleBarDraggerRect = titleBar.AddChild().InsetRight(TitleBarThickness);
@@ -134,12 +129,12 @@ public abstract class Window : MonoBehaviour
             new Color(0.9f, 0.1f, 0.3f),
             (Action)Close);
         
-        closeButton.Content.AddChild().AddImage(PluginResources.LoadSprite("Resources/CloseButton.png")).DisableRaycasts();
+        closeButton.Content.AddChild().AddImage(DefaultResources.LoadSprite("Resources/CloseButton.png")).DisableRaycasts();
 
         titleBarDraggerRect.AddChild().InsetLeft(3).AddLabel(WindowName);
 
         var lowerCorner = WindowRect.AddChildBottomRight().ExtendLeft(16).ExtendTop(16);
-        m_resizeImg = lowerCorner.AddImage(PluginResources.LoadSprite("Resources/WindowCorner.png"));
+        m_resizeImg = lowerCorner.AddImage(DefaultResources.LoadSprite("Resources/WindowCorner.png"));
         lowerCorner.AddChild().Extend(2).AddClearImage().rectTransform.AddDragHandler().SetOnDrag((PointerEventData e) =>
         {
             var offsetMax = WindowRect.offsetMax;

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using VainMapper.Utils;
 using UnityEngine;
 using UnityEngine.UI;
+using VainLib.Utils;
 
-namespace VainMapper.UI.Components;
+namespace VainLib.UI.Components;
 
 public class NoodleVerticalLayout : MonoBehaviour
 {

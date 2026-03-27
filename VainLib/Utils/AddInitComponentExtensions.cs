@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 
-namespace VainMapper.Utils;
+namespace VainLib.Utils;
 
 public static class AddInitComponentExtensions
 {

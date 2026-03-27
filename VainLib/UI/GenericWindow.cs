@@ -1,6 +1,6 @@
-﻿using VainMapper.UI.Components;
+﻿using VainLib.UI.Components;
 
-namespace VainMapper.UI;
+namespace VainLib.UI;
 
 public abstract class GenericWindow<TWindow> : Window where TWindow : GenericWindow<TWindow>
 {

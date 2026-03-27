@@ -1,7 +1,6 @@
-﻿using Beatmap.Helper;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace VainMapper.Utils;
+namespace VainLib.Utils;
 
 public static class UnityComponentHelpers
 {

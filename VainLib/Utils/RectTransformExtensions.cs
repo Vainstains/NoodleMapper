@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VainMapper.UI;
-using VainMapper.UI.Components;
+using VainLib.UI;
+using VainLib.UI.Components;
 
-namespace VainMapper.Utils;
+namespace VainLib.Utils;
 
 public static class RectTransformExtensions
 {
@@ -245,7 +244,7 @@ public static class RectTransformExtensions
 
         var bg = (inputField.InputField.targetGraphic as Image)!;
 
-        bg.sprite = PluginResources.LoadSprite("Resources/RoundRectBordered.png");
+        bg.sprite = DefaultResources.LoadSprite("Resources/RoundRectBordered.png");
         bg.color = new Color(0.30f, 0.30f, 0.30f);
 
         inputField.InputField.textViewport.Extend(4);
@@ -286,7 +285,7 @@ public static class RectTransformExtensions
         handleRect.name = "Handle";
         handleRect.Extend(2).Inset(1);
     
-        var handleImage = handleRect.AddImage(PluginResources.LoadSprite("Resources/RoundRect.png"), new Color(0.5f, 0.5f, 0.5f, 0.8f));
+        var handleImage = handleRect.AddImage(DefaultResources.LoadSprite("Resources/RoundRect.png"), new Color(0.5f, 0.5f, 0.5f, 0.8f));
         handleImage.raycastTarget = true;
         handleImage.type = Image.Type.Sliced;
     

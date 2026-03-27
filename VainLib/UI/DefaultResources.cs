@@ -2,9 +2,9 @@ using System.Reflection;
 using UnityEngine;
 using VainLib.IO;
 
-namespace VainMapper.UI;
+namespace VainLib.UI;
 
-public static class PluginResources
+public static class DefaultResources
 {
     private static readonly ResourceLoader s_loader = new(
         new EmbeddedResourceLocation(Assembly.GetExecutingAssembly()),

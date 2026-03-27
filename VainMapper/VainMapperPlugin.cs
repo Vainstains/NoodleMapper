@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using Beatmap.Enums;
 using HarmonyLib;
+using UnityEngine.InputSystem;
 using VainMapper.UI;
-using VainMapper.UI.Components;
 using VainMapper.Utils;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
+using VainLib.Scenes;
 using VainMapper.Managers;
-using VainMapper.Utils.Scenes;
-using VainMapper.Wiring;
+using VainLib.UI;
+using VainMapper.Managers.Windows;
 using Object = UnityEngine.Object;
 
 namespace VainMapper;
@@ -22,26 +15,52 @@ namespace VainMapper;
 [Plugin("VainMapper")]
 public class VainMapperPlugin
 {
+    public const string Author = "Vainstains";
+    public const string Name = "VainMapper";
+    public const string ID = $"com.{Author}.{Name}";
+    
     [Init]
     private void Init()
     {
-        new Harmony("com.Vainstains.VainMapper")
+        new Harmony(ID)
             .PatchAll(Assembly.GetExecutingAssembly());
         
-        var allStaticInitMethods = typeof(VainMapperPlugin).Assembly.GetTypes()
-            .SelectMany(t => t.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
-            .Where(m => m.IsStatic&& m.GetCustomAttribute(typeof(OnPluginInitAttribute), false) != null);
-
-        foreach (var method in allStaticInitMethods)
-        {
-            Debug.Log($"[VainMapper] Calling static plugin init: {method.DeclaringType.Name}.{method.Name}");
-            method.Invoke(null, null);
-        }
+        ExtensionButtons.AddButton(
+            DefaultResources.LoadSprite("Resources/ExtensionButtonIcon.png"),
+            Helpers.CurrentPluginName,
+            () => { Events.ExtensionButtonClicked.Invoke(); }
+        );
+            
+        ExtensionButtons.AddButton(
+            DefaultResources.LoadSprite("Resources/RebootButtonIcon.png"),
+            "Reboot ChroMapper and return to where you are now",
+            Rebooter.Reboot
+        );
         
         SceneManagers.Register<SongSelectManager>().ForScene(CMScene.SongSelectMenu);
         SceneManagers.Register<SongEditorManager>().ForScene(CMScene.SongEditMenu);
         SceneManagers.Register<EditorGridAndTrackController>().ForScene(CMScene.Mapper);
         SceneManagers.Register<EditorManager>().ForScene(CMScene.Mapper);
         SceneManagers.Register<RebootManager>().ForScene(CMScene.SongSelectMenu);
+        
+        InstallInput();
+    }
+
+    void InstallInput()
+    {
+        var map = CMInputCallbackInstaller.InputInstance.asset.actionMaps
+            .Where(x => x.name == "Node Editor")
+            .FirstOrDefault();
+        CMInputCallbackInstaller.InputInstance.Disable();
+			
+        var toggleWindow = map.AddAction("VainMapper Window", type: InputActionType.Button);
+        toggleWindow.AddCompositeBinding("ButtonWithOneModifier")
+            .With("Modifier", "<Keyboard>/ctrl")
+            .With("Button", "<Keyboard>/n");
+			
+        CMInputCallbackInstaller.InputInstance.Enable();
+        
+        
+        toggleWindow!.performed += EditorMainWindow.OnToggleWindow;
     }
 }

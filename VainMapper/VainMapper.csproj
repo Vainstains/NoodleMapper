@@ -99,9 +99,8 @@
         <Compile Include="EditorThings\RawMapRange.cs" />
         <Compile Include="Managers\EditorGridAndTrackController.cs" />
         <Compile Include="Managers\EditorManager.cs" />
-        <Compile Include="Managers\ManagerBehaviour.cs" />
+        <Compile Include="Managers\EditorPatches.cs" />
         <Compile Include="Managers\RebootManager.cs" />
-        <Compile Include="Managers\SceneManagers.cs" />
         <Compile Include="Managers\SongEditorManager.cs" />
         <Compile Include="Managers\SongSelectManager.cs" />
         <Compile Include="Managers\Windows\EditorMainWindow.cs" />
@@ -122,31 +121,12 @@
         <Compile Include="ModMap\UnknownSpanProcessor.cs" />
         <Compile Include="VainMapperPlugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="UI\Components\DragHandler.cs" />
-        <Compile Include="UI\Components\NoodleButton.cs" />
-        <Compile Include="UI\Components\NoodleDropdown.cs" />
-        <Compile Include="UI\Components\NoodleList.cs" />
-        <Compile Include="UI\Components\NoodleRearrangeableList.cs" />
-        <Compile Include="UI\Components\NoodleTextbox.cs" />
-        <Compile Include="UI\Components\NoodleToggle.cs" />
-        <Compile Include="UI\Components\NoodleVerticalLayout.cs" />
-        <Compile Include="UI\Components\Window.cs" />
-        <Compile Include="UI\Components\WindowContainer.cs" />
-        <Compile Include="UI\GenericWindow.cs" />
         <Compile Include="UI\Events.cs" />
-        <Compile Include="UI\PluginResources.cs" />
-        <Compile Include="Utils\AddInitComponentExtensions.cs" />
         <Compile Include="Utils\CMCanvasGroup.cs" />
         <Compile Include="Utils\GitRunner.cs" />
         <Compile Include="Utils\Helpers.cs" />
         <Compile Include="Utils\JsonKeys.cs" />
         <Compile Include="Utils\Rebooter.cs" />
-        <Compile Include="Utils\RectTransformExtensions.cs" />
-        <Compile Include="Utils\Scenes\CMScene.cs" />
-        <Compile Include="Utils\Scenes\SceneUtils.cs" />
-        <Compile Include="Utils\Settings.cs" />
-        <Compile Include="Utils\UnityComponentHelpers.cs" />
-        <Compile Include="Wiring\OnPluginInitAttribute.cs" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="Resources\*.png" />
@@ -156,9 +136,6 @@
         <Project>{35e8370f-dc32-473e-9185-ff618f38c4c1}</Project>
         <Name>VainLib</Name>
       </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="Resources\meta.json" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     

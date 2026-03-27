@@ -1,4 +1,4 @@
-﻿namespace VainMapper.Utils.Scenes;
+﻿namespace VainLib.Scenes;
 
 /*
    from ChroMapper:

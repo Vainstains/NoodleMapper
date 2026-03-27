@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VainLib.Scenes;
 using VainMapper.Utils;
 
 namespace VainMapper.Managers;

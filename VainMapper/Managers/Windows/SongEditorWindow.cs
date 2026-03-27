@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using UnityEngine;
+using VainLib.UI;
+using VainLib.Utils;
 using VainMapper.UI;
 using VainMapper.Utils;
 
