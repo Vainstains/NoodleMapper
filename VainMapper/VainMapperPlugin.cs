@@ -34,6 +34,7 @@ public class VainMapperPlugin
 
         foreach (var method in allStaticInitMethods)
         {
+            Debug.Log($"[VainMapper] Calling static plugin init: {method.DeclaringType.Name}.{method.Name}");
             method.Invoke(null, null);
         }
         

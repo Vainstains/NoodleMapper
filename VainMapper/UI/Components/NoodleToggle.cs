@@ -28,9 +28,9 @@ public class NoodleToggle : MonoBehaviour
         {
             IsOn = !IsOn;
             m_setter?.Invoke(IsOn);
-        }).OverrideSprite = Globals.Assets.RoundRectBorderedSharp;
+        }).OverrideSprite = PluginResources.LoadSprite("Resources/RoundRectBorderedSharp.png");
         var rt = gameObject.RequireComponent<RectTransform>();
-        m_imageToEnable = rt.AddChildCenter().Extend(8).AddImage(Globals.Assets.RoundRect);
+        m_imageToEnable = rt.AddChildCenter().Extend(8).AddImage(PluginResources.LoadSprite("Resources/RoundRect.png"));
         IsOn = false;
     }
 

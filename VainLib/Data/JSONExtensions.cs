@@ -1,7 +1,6 @@
-﻿using System;
-using SimpleJSON;
+﻿using SimpleJSON;
 
-namespace VainMapper.Utils;
+namespace VainLib.Data;
 
 public static class JSONExtensions
 {

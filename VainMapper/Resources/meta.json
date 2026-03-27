@@ -1,0 +1,26 @@
+﻿{
+    "sprites": [
+        { "path": "RoundRect.png", "border": "12px" },
+        { "path": "RoundRectBordered.png", "border": "12px" },
+        { "path": "RoundRectBorderedSharp.png", "border": "12px" },
+        { "path": "RoundRectBorderOnly.png", "border": "12px" },
+
+        { "path": "ButtonRaised.png", "border": "12px" },
+        { "path": "ButtonDepressed.png", "border": "12px" },
+
+        { "path": "CloseButton.png" },
+        { "path": "WindowCorner.png" },
+        { "path": "TitleBar.png", "border": "12px" },
+        { "path": "Shadow.png", "border": "50%" },
+
+        { "path": "DragHandle.png" },
+        { "path": "Endpoint.png" },
+        { "path": "EndpointStart.png" },
+        { "path": "EndpointEnd.png" },
+        { "path": "EndpointSingle.png" },
+        { "path": "TimelineEndpointSingle.png" },
+        { "path": "EndpointExclusive.png" },
+
+        { "path": "GotoArrow.png" }
+    ]
+}

@@ -124,12 +124,12 @@ public class RangeBarController : MonoBehaviour
         bar.Text = tmp;
             
         bar.StartMarker = CreateMarker("StartMarker");
-        bar.StartMarker.sprite = Globals.Assets.EndpointStart;
+        bar.StartMarker.sprite = PluginResources.LoadSprite("Resources/EndpointStart.png");
         var rt = bar.StartMarker.rectTransform;
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.0f);
         
         bar.EndMarker = CreateMarker("EndMarker");
-        bar.EndMarker.sprite = Globals.Assets.EndpointEnd;
+        bar.EndMarker.sprite = PluginResources.LoadSprite("Resources/EndpointEnd.png");
         rt = bar.EndMarker.rectTransform;
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1.0f);
             
@@ -258,7 +258,9 @@ public class RangeBarController : MonoBehaviour
         bool single = Mathf.Abs(bar.Range.StartBeat - bar.Range.EndBeat) < 0.01f;
 
         bar.RangeBar.EndMarker.enabled = !single;
-        bar.RangeBar.StartMarker.sprite = single ? Globals.Assets.EndpointSingle : Globals.Assets.EndpointStart;
+        bar.RangeBar.StartMarker.sprite = single
+            ? PluginResources.LoadSprite("Resources/EndpointSingle.png")
+            : PluginResources.LoadSprite("Resources/EndpointStart.png");
     }
         
     private void RefreshVisibility()

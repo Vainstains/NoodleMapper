@@ -42,7 +42,9 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
             
             m_tooltip = gameObject.RequireComponent<Tooltip>();
 
-            m_singleDiamond = m_borderL.AddChildCenter().Extend(3f).AddImage(Globals.Assets.TimelineEndpointSingle);
+            m_singleDiamond = m_borderL.AddChildCenter()
+                .Extend(3f)
+                .AddImage(PluginResources.LoadSprite("Resources/TimelineEndpointSingle.png"));
             m_singleDiamond.rectTransform.eulerAngles = new Vector3(0f, 0f, 45f);
             
             gameObject.SetActive(false);

@@ -8,7 +8,7 @@
         <ProjectGuid>{7E3FC87B-50F0-42EA-9CF9-11CE0530B6ED}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>NoodleMapper</RootNamespace>
+        <RootNamespace>VainMapper</RootNamespace>
         <AssemblyName>VainMapper</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
@@ -119,6 +119,7 @@
         <Compile Include="ModMap\ModMapData.cs" />
         <Compile Include="ModMap\NoodleSpan.cs" />
         <Compile Include="ModMap\UnknownFilter.cs" />
+        <Compile Include="ModMap\UnknownSpanProcessor.cs" />
         <Compile Include="VainMapperPlugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="UI\Components\DragHandler.cs" />
@@ -132,12 +133,12 @@
         <Compile Include="UI\Components\Window.cs" />
         <Compile Include="UI\Components\WindowContainer.cs" />
         <Compile Include="UI\GenericWindow.cs" />
-        <Compile Include="UI\Globals.cs" />
+        <Compile Include="UI\Events.cs" />
+        <Compile Include="UI\PluginResources.cs" />
         <Compile Include="Utils\AddInitComponentExtensions.cs" />
         <Compile Include="Utils\CMCanvasGroup.cs" />
         <Compile Include="Utils\GitRunner.cs" />
         <Compile Include="Utils\Helpers.cs" />
-        <Compile Include="Utils\JSONExtensions.cs" />
         <Compile Include="Utils\JsonKeys.cs" />
         <Compile Include="Utils\Rebooter.cs" />
         <Compile Include="Utils\RectTransformExtensions.cs" />
@@ -148,8 +149,16 @@
         <Compile Include="Wiring\OnPluginInitAttribute.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Resources\" />
       <EmbeddedResource Include="Resources\*.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\VainLib\VainLib.csproj">
+        <Project>{35e8370f-dc32-473e-9185-ff618f38c4c1}</Project>
+        <Name>VainLib</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\meta.json" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     

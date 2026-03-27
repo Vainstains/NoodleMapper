@@ -1,12 +1,12 @@
-﻿using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using Beatmap.Info;
-using VainMapper.Wiring;
-using SimpleJSON;
 using UnityEngine;
+using VainLib.Data;
+using VainLib.IO;
 using VainMapper.Managers;
+using VainMapper.Wiring;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
@@ -14,20 +14,32 @@ namespace VainMapper.Utils;
 
 public static class Rebooter
 {
+    private class RebootState
+    {
+        [JsonID("rebootingFrom")]
+        public string RebootingFrom { get; set; } = "none";
+
+        [JsonID("mapDirectory")]
+        public string MapDirectory { get; set; } = string.Empty;
+
+        [JsonID("time")]
+        public float Time { get; set; }
+    }
+
     private static readonly string RebootFile = Helpers.GetPersistentDataPath("VainMapperReboot.json", "NoodleMapperReboot.json");
-    
-    static bool DidJustReboot(out JSONNode rebootJson)
+
+    static bool DidJustReboot(out RebootState rebootState)
     {
         if (!File.Exists(RebootFile))
         {
-            rebootJson = new JSONObject();
+            rebootState = new RebootState();
             return false;
         }
-        
-        rebootJson = Helpers.LoadJSONFile(RebootFile);
+
+        rebootState = new JsonFile<RebootState>(RebootFile).Data;
         return true;
     }
-    
+
     public static void HandleReboot()
     {
         var didReboot = DidJustReboot(out var rebootJson);
@@ -37,8 +49,8 @@ public static class Rebooter
             return;
         }
 
-        string? location = rebootJson.GetValueOrDefault("rebootingFrom", "none");
-        
+        string? location = rebootJson.RebootingFrom;
+
         if (location == null || location == "none")
         {
             FinishReboot();
@@ -49,31 +61,32 @@ public static class Rebooter
 
         if (location == "song")
         {
-            var dir = rebootJson["mapDirectory"];
+            var dir = rebootJson.MapDirectory;
             DirectoryInfo dirInfo = new DirectoryInfo(dir);
             if (!dirInfo.Exists)
             {
                 Debug.LogError($"Reboot: Map directory does not exist! {dir}");
                 return;
             }
+
             Debug.Log($"Reboot: loading {dirInfo.FullName}");
             var mapInfo = BeatSaberSongUtils.GetInfoFromFolder(dirInfo.FullName);
             BeatSaberSongContainer.Instance.SelectSongForEditing(mapInfo);
         }
         else if (location == "mapper")
         {
-            var dir = rebootJson["mapDirectory"];
-            var targetDiff = rebootJson["difficulty"];
+            var dir = rebootJson.MapDirectory;
             DirectoryInfo dirInfo = new DirectoryInfo(dir);
             if (!dirInfo.Exists)
             {
                 Debug.LogError($"Reboot: Map directory does not exist! {dir}");
                 return;
             }
+
             Debug.Log($"Reboot: loading {dirInfo.FullName}");
             var mapInfo = BeatSaberSongUtils.GetInfoFromFolder(dirInfo.FullName);
             new GameObject("Mapper Reboot Handler").AddComponent<MapperRebootHandler>().time =
-                rebootJson["time"];
+                rebootJson.Time;
             BeatSaberSongContainer.Instance.SelectSongForEditing(mapInfo);
         }
         else
@@ -82,38 +95,37 @@ public static class Rebooter
         }
     }
 
-    static JSONNode BuildRebootJson()
+    static RebootState BuildRebootJson()
     {
-        var rebootJson = new JSONObject();
-        
-        var songContainer = BeatSaberSongContainer.Instance;
+        var rebootJson = new RebootState();
         var editorManager = EditorManager.Instance;
 
         if (SongSelectManager.Instance != null)
         {
-            rebootJson["rebootingFrom"] = "song";
-            rebootJson["mapDirectory"] = Helpers.MapDir;
+            rebootJson.RebootingFrom = "song";
+            rebootJson.MapDirectory = Helpers.MapDir;
             return rebootJson;
         }
-        
+
         if (editorManager != null)
         {
-            var info = BeatSaberSongContainer.Instance.MapDifficultyInfo;
-            rebootJson["rebootingFrom"] = "mapper";
-            rebootJson["mapDirectory"] = Helpers.MapDir;
-            var fullName = $"{info.Difficulty}{info.Characteristic}";
-            rebootJson["time"] = editorManager.Atsc.CurrentJsonTime;
+            rebootJson.RebootingFrom = "mapper";
+            rebootJson.MapDirectory = Helpers.MapDir;
+            rebootJson.Time = editorManager.Atsc.CurrentJsonTime;
             return rebootJson;
         }
-        
-        rebootJson["rebootingFrom"] = "none";
+
+        rebootJson.RebootingFrom = "none";
         return rebootJson;
     }
 
     public static void Reboot()
     {
-        var json = BuildRebootJson();
-        File.WriteAllText(RebootFile, json.ToString(4));
+        var json = new JsonFile<RebootState>(RebootFile)
+        {
+            Data = BuildRebootJson()
+        };
+        json.Save();
 
         var saver = Object.FindObjectOfType<AutoSaveController>();
         if (saver != null)
@@ -131,13 +143,14 @@ public static class Rebooter
 
     static void SpawnChromapper()
     {
-        Process.Start(Path.GetDirectoryName(Application.dataPath) + "/" + 
+        Process.Start(Path.GetDirectoryName(Application.dataPath) + "/" +
                       Path.GetFileName(Application.dataPath).Replace("_Data", ".exe"));
     }
-    
+
     private class MapperRebootHandler : MonoBehaviour
     {
         public float time;
+
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
@@ -156,15 +169,18 @@ public static class Rebooter
                     waiting = false;
                 yield return new WaitForSeconds(0.15f);
             }
+
             waiting = true;
             while (waiting)
             {
-                if (songInfoEditUI.previewAudio.clip != null && !(BeatSaberSongContainer.Instance.MapDifficultyInfo == null || PersistentUI.Instance.DialogBoxIsEnabled))
+                if (songInfoEditUI.previewAudio.clip != null &&
+                    !(BeatSaberSongContainer.Instance.MapDifficultyInfo == null || PersistentUI.Instance.DialogBoxIsEnabled))
                     waiting = false;
                 yield return new WaitForSeconds(0.15f);
             }
+
             yield return new WaitForSeconds(0.1f);
-            
+
             songInfoEditUI.EditMapButtonPressed();
 
             waiting = true;
@@ -174,11 +190,11 @@ public static class Rebooter
                     waiting = false;
                 yield return new WaitForSeconds(0.1f);
             }
-            
+
             EditorManager.Instance.Atsc.MoveToJsonTime(time);
-            
+
             FinishReboot();
-            
+
             Destroy(gameObject);
         }
     }

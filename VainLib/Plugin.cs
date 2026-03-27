@@ -2,6 +2,7 @@
 using UnityEngine;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
+using VainLib.Data;
 
 namespace VainLib;
 
@@ -19,6 +20,7 @@ public class Plugin
             .PatchAll(Assembly.GetExecutingAssembly());
 
         Debug.Log($"Hello from {Name}!");
+        Testing.Test();
     }
 }
 

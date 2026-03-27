@@ -77,7 +77,9 @@ public class NoodleTextbox : MonoBehaviour
         
         var rt = GetComponent<RectTransform>();
 
-        m_outline = rt.AddChild().AddImage(Globals.Assets.RoundRectBorderOnly, OutlineColorIdle).DisableRaycasts();
+        m_outline = rt.AddChild()
+            .AddImage(PluginResources.LoadSprite("Resources/RoundRectBorderOnly.png"), OutlineColorIdle)
+            .DisableRaycasts();
     }
 
     public NoodleTextbox Set(string? value, bool mixed, Setter setter)

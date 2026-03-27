@@ -245,7 +245,7 @@ public static class RectTransformExtensions
 
         var bg = (inputField.InputField.targetGraphic as Image)!;
 
-        bg.sprite = Globals.Assets.RoundRectBordered;
+        bg.sprite = PluginResources.LoadSprite("Resources/RoundRectBordered.png");
         bg.color = new Color(0.30f, 0.30f, 0.30f);
 
         inputField.InputField.textViewport.Extend(4);
@@ -286,7 +286,7 @@ public static class RectTransformExtensions
         handleRect.name = "Handle";
         handleRect.Extend(2).Inset(1);
     
-        var handleImage = handleRect.AddImage(Globals.Assets.RoundRect, new Color(0.5f, 0.5f, 0.5f, 0.8f));
+        var handleImage = handleRect.AddImage(PluginResources.LoadSprite("Resources/RoundRect.png"), new Color(0.5f, 0.5f, 0.5f, 0.8f));
         handleImage.raycastTarget = true;
         handleImage.type = Image.Type.Sliced;
     

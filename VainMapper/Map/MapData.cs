@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+using System.Collections.Generic;
 using SimpleJSON;
 using UnityEngine;
+using VainLib.Data;
+using VainLib.IO;
 using VainMapper.ModMap;
 using VainMapper.Utils;
 
@@ -9,58 +10,63 @@ namespace VainMapper.Map;
 
 public class MapData
 {
-    public string? ModMapFile { get; private set; } = null;
-    public ModMapData? ModMapData { get; private set; } = null;
-
-    public List<MapRange> MapRanges { get; } = new();
-    public static MapData FromJSON(JSONNode node)
+    private class MapFileData
     {
-        var data = new MapData();
-        
-        if (!node.IsObject)
-            return data;
+        [JsonID("modMap")]
+        public string? ModMapFile { get; set; }
 
-        if (node.TryGetString("modMap", out var file))
+        [JsonID("ranges")]
+        public List<MapRange> MapRanges { get; set; } = new();
+    }
+
+    public string? ModMapFile { get; private set; }
+    public ModMapData? ModMapData { get; private set; }
+    public List<MapRange> MapRanges { get; private set; } = new();
+
+    public static MapData LoadFromFile(string path)
+    {
+        var file = new JsonFile<MapFileData>(path);
+        return FromFileData(file.Data);
+    }
+
+    private static MapData FromFileData(MapFileData fileData)
+    {
+        var data = new MapData
         {
-            var path = Helpers.GetModMapDataPath(file);
-            if (File.Exists(path))
-            {
-                data.ModMapFile = file;
-                var modMapJson = Helpers.LoadJSONFile(path);
-                data.ModMapData = ModMapData.FromJSON(modMapJson);
-            }
-        }
-        
-        if (node.TryGetArray("ranges", out var ranges))
-        {
-            for (var i = 0; i < ranges.Count; i++)
-            {
-                var range = MapRange.FromJSON(ranges[i]);
-                data.MapRanges.Add(range);
-            }
-        }
-        
+            MapRanges = fileData.MapRanges ?? new List<MapRange>()
+        };
+
+        if (!string.IsNullOrEmpty(fileData.ModMapFile))
+            data.SetModMapFile(fileData.ModMapFile);
+
         return data;
     }
 
-    public JSONNode ToJSON()
+    private MapFileData ToFileData()
     {
-        var node = new JSONObject();
-        
+        return new MapFileData
+        {
+            ModMapFile = ModMapFile,
+            MapRanges = MapRanges
+        };
+    }
+
+    public void SaveToFile(string path)
+    {
         if (ModMapFile != null && ModMapData != null)
         {
-            node.Add("modMap", ModMapFile);
-            Helpers.WriteAllText(Helpers.GetModMapDataPath(ModMapFile), ModMapData.ToJSON().ToString(4));
+            var modMapFile = new JsonFile<ModMapData>(Helpers.GetModMapDataPath(ModMapFile))
+            {
+                Data = ModMapData
+            };
+            modMapFile.Save();
         }
-        
-        var rangesArray = new JSONArray();
-        foreach (var range in MapRanges)
+
+        var mapFile = new JsonFile<MapFileData>(path)
         {
-            rangesArray.Add(range.ToJSON());
-        }
-        node.Add("ranges", rangesArray);
-        
-        return node;
+            Data = ToFileData()
+        };
+        mapFile.Save();
     }
 
     public void SetModMapFile(string? file)
@@ -72,7 +78,8 @@ public class MapData
             ModMapData = null;
             return;
         }
-        var modMapJson = Helpers.LoadJSONFile(Helpers.GetModMapDataPath(file!));
-        ModMapData = ModMapData.FromJSON(modMapJson);
+
+        var modMapFile = new JsonFile<ModMapData>(Helpers.GetModMapDataPath(file!));
+        ModMapData = modMapFile.Data;
     }
 }

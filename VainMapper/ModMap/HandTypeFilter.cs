@@ -1,12 +1,16 @@
-﻿using Beatmap.Base;
+using Beatmap.Base;
 using Beatmap.Enums;
 using SimpleJSON;
+using VainLib.Data;
 
 namespace VainMapper.ModMap;
 
+[JsonID(FilterTypeStr)]
 public class HandTypeFilter : INoodleFilter
 {
     public const string FilterTypeStr = "HandType";
+
+    [JsonID("hand")]
     public HandType Hand { get; set; }
 
     public bool TestAgainst(BaseObject obj)
@@ -20,23 +24,7 @@ public class HandTypeFilter : INoodleFilter
             case BaseArc arc:
                 return arc.Color == (int)Hand;
         }
+
         return false;
-    }
-
-    public static HandTypeFilter FromJSONNode(JSONNode node)
-    {
-        var filter = new HandTypeFilter();
-        filter.Hand = (HandType)(int)node.GetValueOrDefault("hand", 0);
-        return filter;
-    }
-
-    public JSONNode ToJSON()
-    {
-        var node = new JSONObject();
-        
-        node["type"] = FilterTypeStr;
-        node["hand"] = (int)Hand;
-        
-        return node;
     }
 }

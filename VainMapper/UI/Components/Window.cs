@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace VainMapper.UI.Components;
+using Settings = VainMapper.Utils.Settings;
 
 public abstract class Window : MonoBehaviour
 {
@@ -59,10 +60,11 @@ public abstract class Window : MonoBehaviour
     
     protected void LoadPosition()
     {
-        Vector4 pos = Utils.Settings.Get($"(Window) {WindowName}", new Vector4(
-            50, -20,
-            400, 300
-        ));
+        if (!Settings.Windows.TryGetValue($"(Window) {WindowName}", out var pos))
+            pos = new Vector4(
+                50, -20,
+                400, 300
+            );
         
         WindowRect.anchoredPosition = new Vector2(pos.x, pos.y);
         WindowRect.sizeDelta = new Vector2(pos.z, pos.w);
@@ -71,12 +73,14 @@ public abstract class Window : MonoBehaviour
 
     protected void SavePosition()
     {
-        Utils.Settings.Set($"(Window) {WindowName}", new Vector4(
+        Settings.Windows[$"(Window) {WindowName}"] = new Vector4(
             WindowRect.anchoredPosition.x,
             WindowRect.anchoredPosition.y,
             WindowRect.sizeDelta.x,
             WindowRect.sizeDelta.y
-        ));
+        );
+
+        Settings.Save();
     }
 
     protected void SetupScrolling(ref RectTransform content)
@@ -97,22 +101,23 @@ public abstract class Window : MonoBehaviour
     
     private void Init()
     {
-        float shadowRadius = Globals.Assets.Shadow.texture.width * 0.5f;
+        var shadowSprite = PluginResources.LoadSprite("Resources/Shadow.png");
+        float shadowRadius = shadowSprite.texture.width * 0.5f;
         var shadowImg = WindowRect.AddChild().Extend(shadowRadius * 0.85f).InsetTop(shadowRadius * 0.1f).AddImage(
-            Globals.Assets.Shadow,
+            shadowSprite,
             new Color(0, 0, 0, 0.9f));
         shadowImg.raycastTarget = false;
         
         var bg = WindowRect.AddChild().AddImage(
-            Globals.Assets.RoundRect,
+            PluginResources.LoadSprite("Resources/RoundRect.png"),
             new Color(0.22f, 0.22f, 0.22f));
         var titleBar = WindowRect.AddChild(RectTransform.Edge.Top).ExtendBottom(TitleBarThickness);
         var titleBarImg = titleBar.AddImage(
-            Globals.Assets.TitleBar,
+            PluginResources.LoadSprite("Resources/TitleBar.png"),
             new Color(0.35f, 0.35f, 0.35f));
 
         WindowRect.AddChild().AddImage(
-            Globals.Assets.RoundRectBorderOnly,
+            PluginResources.LoadSprite("Resources/RoundRectBorderOnly.png"),
             new Color(0.4f, 0.4f, 0.4f)).DisableRaycasts();
 
         var titleBarDraggerRect = titleBar.AddChild().InsetRight(TitleBarThickness);
@@ -129,12 +134,12 @@ public abstract class Window : MonoBehaviour
             new Color(0.9f, 0.1f, 0.3f),
             (Action)Close);
         
-        closeButton.Content.AddChild().AddImage(Globals.Assets.CloseButton).DisableRaycasts();
+        closeButton.Content.AddChild().AddImage(PluginResources.LoadSprite("Resources/CloseButton.png")).DisableRaycasts();
 
         titleBarDraggerRect.AddChild().InsetLeft(3).AddLabel(WindowName);
 
         var lowerCorner = WindowRect.AddChildBottomRight().ExtendLeft(16).ExtendTop(16);
-        m_resizeImg = lowerCorner.AddImage(Globals.Assets.WindowCorner);
+        m_resizeImg = lowerCorner.AddImage(PluginResources.LoadSprite("Resources/WindowCorner.png"));
         lowerCorner.AddChild().Extend(2).AddClearImage().rectTransform.AddDragHandler().SetOnDrag((PointerEventData e) =>
         {
             var offsetMax = WindowRect.offsetMax;

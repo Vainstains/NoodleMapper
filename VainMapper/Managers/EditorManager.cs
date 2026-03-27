@@ -38,11 +38,10 @@ public class EditorManager : ManagerBehaviour<EditorManager>
 
         if (Helpers.TryGetMapFile(info.CustomData, out var mapFile))
         {
-            var json = Helpers.LoadJSONFile(Helpers.GetMapDataPath(mapFile));
-            Map = MapData.FromJSON(json);
+            Map = MapData.LoadFromFile(Helpers.GetMapDataPath(mapFile));
         }
         
-        Globals.Events.ExtensionButtonClicked.AddListener(EditorMainWindow.ToggleUI);
+        Events.ExtensionButtonClicked.AddListener(EditorMainWindow.ToggleUI);
         
         LoadedDifficultySelectController.LoadedDifficultyChangedEvent += DiffChanged;
         EditorPatches.OnSavingDiff += Save;
@@ -72,7 +71,7 @@ public class EditorManager : ManagerBehaviour<EditorManager>
         
         if (Helpers.TryGetMapFile(info.CustomData, out var mapFile) && Map != null)
         {
-            Helpers.WriteAllText(Helpers.GetMapDataPath(mapFile), Map.ToJSON().ToString(4));
+            Map.SaveToFile(Helpers.GetMapDataPath(mapFile));
         }
     }
 
@@ -122,7 +121,11 @@ public class EditorManager : ManagerBehaviour<EditorManager>
     public static void CreateModmap(string name)
     {
         var path = Helpers.GetModMapDataPath(name);
-        Helpers.WriteAllText(path, "{}");
+        var modMapFile = new VainLib.IO.JsonFile<ModMapData>(path)
+        {
+            Data = new ModMapData()
+        };
+        modMapFile.Save();
     }
 }
 

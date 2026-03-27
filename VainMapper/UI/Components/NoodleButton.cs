@@ -81,7 +81,7 @@ public class NoodleButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         m_image.color = MainColor;
         m_content = gameObject.RequireComponent<RectTransform>().AddChild().InsetBottom(DepressDeltaY);
         
-        SetState(Globals.Assets.ButtonRaised, Vector2.zero);
+        SetState(PluginResources.LoadSprite("Resources/ButtonRaised.png"), Vector2.zero);
     }
 
     public void SetOnClick(Action onClick)
@@ -108,11 +108,11 @@ public class NoodleButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        SetState(Globals.Assets.ButtonDepressed, Vector2.down * DepressDeltaY);
+        SetState(PluginResources.LoadSprite("Resources/ButtonDepressed.png"), Vector2.down * DepressDeltaY);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        SetState(Globals.Assets.ButtonRaised, Vector2.zero);
+        SetState(PluginResources.LoadSprite("Resources/ButtonRaised.png"), Vector2.zero);
     }
 }

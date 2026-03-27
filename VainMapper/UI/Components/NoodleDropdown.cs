@@ -15,19 +15,19 @@ public class NoodleDropdown : MonoBehaviour
     {
         m_dropdown = gameObject.AddComponent<TMP_Dropdown>();
         var rt = gameObject.RequireComponent<RectTransform>();
-        var img = rt.AddImage(Globals.Assets.RoundRectBordered, new Color(0.35f, 0.35f, 0.35f));
+        var img = rt.AddImage(PluginResources.LoadSprite("Resources/RoundRectBordered.png"), new Color(0.35f, 0.35f, 0.35f));
 
         var label = rt.AddChild().InsetLeft(4).AddLabel("option",
             alignmentOptions: TextAlignmentOptions.Center);
 
         var template = rt.AddChild(RectTransform.Edge.Bottom).ExtendBottom(100);
 
-        template.AddImage(Globals.Assets.RoundRectBordered, new Color(0.39f, 0.39f, 0.39f));
+        template.AddImage(PluginResources.LoadSprite("Resources/RoundRectBordered.png"), new Color(0.39f, 0.39f, 0.39f));
 
         var templateItem = template.AddChild(RectTransform.Edge.Top).ExtendBottom(20);
         var itemLabel = templateItem.AddChild().InsetLeft(4).AddLabel("item",
             alignmentOptions: TextAlignmentOptions.Center);
-        var itemBg = templateItem.AddImage(Globals.Assets.RoundRect, new Color(0.25f, 0.4f, 0.8f, 1.0f));
+        var itemBg = templateItem.AddImage(PluginResources.LoadSprite("Resources/RoundRect.png"), new Color(0.25f, 0.4f, 0.8f, 1.0f));
         var toggle = templateItem.RequireComponent<Toggle>();
         toggle.graphic = itemBg;
         toggle.isOn = true;
