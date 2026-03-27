@@ -144,13 +144,16 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
     
     public void RefreshGridStuff()
     {
-        var atsc = EditorManager.Instance.Atsc;
-        
         if (!EditorManager.NMEnabled)
             return;
-        
-        var map = EditorManager.Instance.Map;
-        
+
+        var editorManager = EditorManager.Instance;
+        if (editorManager == null || editorManager.Map == null || m_rangeBarController == null || m_timelineRangeBarRect == null)
+            return;
+
+        var atsc = editorManager.Atsc;
+        var map = editorManager.Map;
+
         SetRanges(map.MapRanges);
         
         m_rangeBarController.RefreshPositions();

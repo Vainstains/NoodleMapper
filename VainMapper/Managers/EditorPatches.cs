@@ -20,6 +20,13 @@ class EditorPatches
     [HarmonyPostfix]
     static void BPMRefresh()
     {
-        EditorGridAndTrackController.Instance.RefreshGridStuff();
+        EditorGridAndTrackController.Instance?.RefreshGridStuff();
+    }
+
+    [HarmonyPatch(typeof(BeatmapActionContainer), nameof(BeatmapActionContainer.AddAction))]
+    [HarmonyPostfix]
+    static void ActionAdded()
+    {
+        EditorManager.Instance?.ApplyActiveModMap();
     }
 }

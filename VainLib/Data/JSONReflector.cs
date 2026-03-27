@@ -837,7 +837,14 @@ public static class JSONReflector
                     continue;
 
                 var value = DeserializeObject(memberNode, member.DeclaredType, member.InterfaceType);
-                member.SetValue(instance, value!);
+                try
+                {
+                    member.SetValue(instance, value!);
+                }
+                catch (Exception e)
+                {
+                    // haha fuck you
+                }
             }
             
             if (record.OnJsonDeserialized != null)

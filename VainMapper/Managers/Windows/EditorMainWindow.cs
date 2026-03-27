@@ -42,6 +42,8 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
     private void DifficultyChanged()
     {
         EditorModMapManagerWindow.CloseUI();
+        EditorModMapWindow.CloseUI();
+        EditorModMapSpanWindow.CloseUI();
     }
 
     protected override void BuildUI(RectTransform content)
@@ -54,11 +56,22 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
                 alignmentOptions: TextAlignmentOptions.Center).enableWordWrapping = true;
             return;
         }
+
+        var editorManager = EditorManager.Instance;
+        editorManager?.EnsureMapLoaded();
+
+        var map = editorManager?.Map ?? EditorManager.TryLoadCurrentMapData();
+        if (map == null)
+        {
+            content.AddLabel("VainMapper is still loading this difficulty.",
+                overflowMode: TextOverflowModes.Overflow,
+                alignmentOptions: TextAlignmentOptions.Center).enableWordWrapping = true;
+            return;
+        }
         
         SetupScrolling(ref content);
         var layout = content.AddVertical();
         content.AddSizeFitter(vertical: ContentSizeFitter.FitMode.PreferredSize);
-        var map = EditorManager.Instance.Map;
         
         BuildModMapSelector(layout, map);
         
@@ -95,6 +108,9 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
                     map.SetModMapFile(modmaps[newIdx]);
                 else
                     map.SetModMapFile(null);
+                EditorModMapWindow.CloseUI();
+                EditorModMapSpanWindow.CloseUI();
+                EditorManager.Instance?.ApplyActiveModMap();
                 RebuildAll();
             });
 
@@ -102,6 +118,19 @@ public class EditorMainWindow : GenericWindow<EditorMainWindow>
         {
             EditorModMapManagerWindow.ToggleUI();
         });
+
+        if (map.ModMapData == null)
+            return;
+
+        var row = layout.AddRow();
+        row.Field("Effect ranges", 1, -86).AddLabel(
+            $"{map.ModMapData.EffectSpans.Count} configured",
+            alignmentOptions: TextAlignmentOptions.Center);
+        row.AddChild(RectTransform.Edge.Right).ExtendLeft(84).AddButton("open...", () =>
+        {
+            EditorModMapWindow.CloseUI();
+            EditorModMapWindow.ToggleUI();
+        }).MainColor = new Color(0.3f, 0.4f, 0.6f);
     }
 
     private void BuildMapRangeEditor(NoodleVerticalLayout layout, MapData map)

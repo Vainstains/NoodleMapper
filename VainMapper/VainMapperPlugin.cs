@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using VainMapper.UI;
 using VainMapper.Utils;
@@ -41,6 +42,7 @@ public class VainMapperPlugin
         SceneManagers.Register<SongEditorManager>().ForScene(CMScene.SongEditMenu);
         SceneManagers.Register<EditorGridAndTrackController>().ForScene(CMScene.Mapper);
         SceneManagers.Register<EditorManager>().ForScene(CMScene.Mapper);
+        SceneManagers.Register<OutlineManager>().ForScene(CMScene.Mapper);
         SceneManagers.Register<RebootManager>().ForScene(CMScene.SongSelectMenu);
         
         InstallInput();
@@ -57,10 +59,29 @@ public class VainMapperPlugin
         toggleWindow.AddCompositeBinding("ButtonWithOneModifier")
             .With("Modifier", "<Keyboard>/ctrl")
             .With("Button", "<Keyboard>/n");
+
+        var testLog = map.AddAction("VainMapper Test Log", type: InputActionType.Button);
+        testLog.AddBinding("<Keyboard>/k");
 			
         CMInputCallbackInstaller.InputInstance.Enable();
         
         
         toggleWindow!.performed += EditorMainWindow.OnToggleWindow;
+        testLog.performed += _ =>
+        {
+            if (OutlineManager.Instance != null && EditorManager.Instance != null)
+            {
+                var selection = SelectionController.SelectedObjects.ToArray();
+                SelectionController.DeselectAll();
+                
+                OutlineManager.Instance.ClearAllOutlines();
+                foreach (var obj in selection)
+                {
+                    var c = Random.ColorHSV();
+                    OutlineManager.Instance.SetOutline(obj, c);
+                }
+                OutlineManager.Instance.RefreshAllOutlines();
+            }
+        };
     }
 }

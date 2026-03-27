@@ -1,8 +1,8 @@
-﻿using Beatmap.Base;
+using Beatmap.Base;
 
 namespace VainMapper.ModMap;
 
-public interface INoodleSpanProcessor
+public interface INoodleSpanProcessor : IModMapEditorItem
 {
     public void Process(BaseObject obj);
 }
