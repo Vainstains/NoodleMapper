@@ -204,7 +204,7 @@ public class EditorManager : ManagerBehaviour<EditorManager>
         }
     }
 
-    private IEnumerable<BaseObject> EnumerateEditableObjects()
+    public IEnumerable<BaseObject> EnumerateEditableObjects()
     {
         foreach (var obj in m_noteGridContainer.MapObjects)
             yield return obj;

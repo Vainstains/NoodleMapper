@@ -102,21 +102,11 @@ public class ObjectTypeFilter : INoodleFilter
     {
         var control = content.Field("Object Type");
         control.AddDropdown("Note", "Event", "Obstacle", "CustomNote", "CustomEvent", "BpmChange", "Arc", "Chain")
-            .SetSelectedOption(ObjectTypeToDropdownIndex(ObjectType))
+            .SetSelectedOption((int)ObjectType)
             .SetOnChange(idx =>
             {
-                ObjectType = DropdownIndexToObjectType(idx);
+                ObjectType = (ObjectType)idx;
                 onChanged();
             });
-    }
-
-    private static int ObjectTypeToDropdownIndex(ObjectType objectType)
-    {
-        return (int)objectType;
-    }
-
-    private static ObjectType DropdownIndexToObjectType(int index)
-    {
-        return (ObjectType)index;
     }
 }

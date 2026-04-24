@@ -9,9 +9,5 @@ namespace VainMapper.UI;
 public static class Events
 {
     public static UnityEvent ExtensionButtonClicked = new ();
-    
-    private static void OnPluginInit()
-    {
-        
-    }
+    public static UnityEvent ExtrasClicked = new ();
 }

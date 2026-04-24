@@ -3,6 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using VainLib.IO;
 using VainMapper.UI;
 using VainMapper.Utils;
 using VainLib.Scenes;
@@ -27,13 +28,19 @@ public class VainMapperPlugin
             .PatchAll(Assembly.GetExecutingAssembly());
         
         ExtensionButtons.AddButton(
-            DefaultResources.LoadSprite("Resources/ExtensionButtonIcon.png"),
+            PluginResources.LoadSprite("Resources/ExtensionButtonIcon.png"),
             Helpers.CurrentPluginName,
             () => { Events.ExtensionButtonClicked.Invoke(); }
         );
+        
+        ExtensionButtons.AddButton(
+            PluginResources.LoadSprite("Resources/Extras.png"),
+            Helpers.CurrentPluginName,
+            () => { Events.ExtrasClicked.Invoke(); }
+        );
             
         ExtensionButtons.AddButton(
-            DefaultResources.LoadSprite("Resources/RebootButtonIcon.png"),
+            PluginResources.LoadSprite("Resources/RebootButtonIcon.png"),
             "Reboot ChroMapper and return to where you are now",
             Rebooter.Reboot
         );
@@ -43,6 +50,7 @@ public class VainMapperPlugin
         SceneManagers.Register<EditorGridAndTrackController>().ForScene(CMScene.Mapper);
         SceneManagers.Register<EditorManager>().ForScene(CMScene.Mapper);
         SceneManagers.Register<OutlineManager>().ForScene(CMScene.Mapper);
+        SceneManagers.Register<EditorExtrasManager>().ForScene(CMScene.Mapper);
         SceneManagers.Register<RebootManager>().ForScene(CMScene.SongSelectMenu);
         
         InstallInput();
@@ -84,4 +92,24 @@ public class VainMapperPlugin
             }
         };
     }
+}
+
+public static class PluginResources
+{
+    private static readonly ResourceLoader s_loader = new(
+        new EmbeddedResourceLocation(Assembly.GetExecutingAssembly()),
+        "Resources/meta.json"
+    );
+
+    public static bool HasResource(string path) => s_loader.HasResource(path);
+
+    public static Sprite LoadSprite(string path) => s_loader.LoadSprite(path);
+
+    public static bool TryLoadSprite(string path, out Sprite sprite) => s_loader.TryLoadSprite(path, out sprite);
+
+    public static Texture2D LoadTexture(string path) => s_loader.LoadTexture(path);
+
+    public static byte[] LoadBytes(string path) => s_loader.LoadBytes(path);
+
+    public static string LoadText(string path) => s_loader.LoadText(path);
 }

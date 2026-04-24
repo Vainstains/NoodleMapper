@@ -70,3 +70,40 @@ public class NoodleDropdown : MonoBehaviour
         return this;
     }
 }
+
+public class NoodleEnumDropdown : MonoBehaviour
+{
+    private NoodleDropdown m_dropdown = null!;
+    private Action<int>? m_onChange;
+    private Type m_enumType = null!;
+    private void Init(Type enumType)
+    {
+        m_enumType = enumType;
+        m_dropdown = gameObject.AddInitComponent<NoodleDropdown>();
+        m_dropdown.SetOptions(Enum.GetNames(enumType));
+        m_dropdown.SetOnChange(Changed);
+    }
+
+    private void Changed(int idx)
+    {
+        m_onChange?.Invoke(idx);
+    }
+
+    public NoodleEnumDropdown SetSelectedOption<T>(T option) where T : struct, Enum
+    {
+        if (typeof(T) != m_enumType)
+            throw new ArgumentException("Enum type mismatch");
+
+        m_dropdown.SetSelectedOption((int)(object)option);
+        return this;
+    }
+
+    public NoodleEnumDropdown SetOnChange<T>(Action<T> onChange) where T : struct, Enum
+    {
+        if (typeof(T) != m_enumType)
+            throw new ArgumentException("Enum type mismatch");
+        
+        m_onChange = idx => onChange((T)(object)Enum.ToObject(m_enumType, idx));
+        return this;
+    }
+}

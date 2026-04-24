@@ -253,6 +253,13 @@ public static class RectTransformExtensions
         return inputField.InputField;
     }
 
+    public static NoodleValueInput AddValueInput(this RectTransform self, float defaultValue = 0, float min = float.MinValue, float max = float.MaxValue, float step = 1)
+    {
+        var input = self.AddInitComponent<NoodleValueInput>();
+        input.SetDefault(defaultValue).SetMinMax(min, max).SetStep(step);
+        return input;
+    }
+
     public static RectTransform AddVerticalScrollView(this RectTransform self) =>
         self.AddVerticalScrollView(out _);
     public static RectTransform AddVerticalScrollView(this RectTransform self, out ScrollRect scrollRect)
@@ -448,6 +455,19 @@ public static class RectTransformExtensions
     {
         var dropdown = self.AddInitComponent<NoodleDropdown>();
         dropdown.SetOptions(options);
+        return dropdown;
+    }
+
+    public static NoodleEnumDropdown AddDropdown<TEnum>(this RectTransform self) where TEnum : struct, Enum
+    {
+        var dropdown = self.AddInitComponent<NoodleEnumDropdown>(typeof(TEnum));
+        return dropdown;
+    }
+    
+    public static NoodleEnumDropdown AddDropdown<TEnum>(this RectTransform self, Action<TEnum> onChange) where TEnum : struct, Enum
+    {
+        var dropdown = self.AddDropdown<TEnum>();
+        dropdown.SetOnChange(onChange);
         return dropdown;
     }
 
