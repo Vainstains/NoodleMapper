@@ -95,6 +95,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="EditorThings\GridSnapMarkerController.cs" />
         <Compile Include="EditorThings\RangeBarController.cs" />
         <Compile Include="EditorThings\RawMapRange.cs" />
         <Compile Include="Managers\EditorGridAndTrackController.cs" />

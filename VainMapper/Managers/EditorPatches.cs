@@ -28,5 +28,6 @@ class EditorPatches
     static void ActionAdded()
     {
         EditorManager.Instance?.ApplyActiveModMap();
+        EditorGridAndTrackController.Instance?.RefreshGridStuff();
     }
 }

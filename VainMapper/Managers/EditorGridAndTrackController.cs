@@ -16,6 +16,7 @@ namespace VainMapper.Managers;
 
 public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackController>
 {
+    private GridSnapMarkerController m_gridSnapMarkerController = null!;
     private class TimelineRangeBar : MonoBehaviour, IPointerClickHandler
     {
         private RectTransform m_rt;
@@ -105,10 +106,12 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
     protected override void PostInit()
     {
         LoadedDifficultySelectController.LoadedDifficultyChangedEvent += DiffChanged;
-        
+
+        m_gridSnapMarkerController = GridSnapMarkerController.Create();
+
         if (!EditorManager.NMEnabled)
             return;
-        
+
         m_rangeBarController = RangeBarController.Create();
         m_tipc = FindObjectOfType<TimelineInputPlaybackController>();
         var mapEditorUI = FindFirstObjectByType<MapEditorUI>();
@@ -130,6 +133,8 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
     
     private void DiffChanged()
     {
+        if (m_gridSnapMarkerController != null)
+            Destroy(m_gridSnapMarkerController.gameObject);
         if (m_rangeBarController != null)
             Destroy(m_rangeBarController.gameObject);
         if (m_timelineRangeBarRect != null)
@@ -144,6 +149,8 @@ public class EditorGridAndTrackController : ManagerBehaviour<EditorGridAndTrackC
     
     public void RefreshGridStuff()
     {
+        m_gridSnapMarkerController?.RefreshMarkers();
+
         if (!EditorManager.NMEnabled)
             return;
 

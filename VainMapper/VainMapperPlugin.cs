@@ -49,7 +49,7 @@ public class VainMapperPlugin
         SceneManagers.Register<SongEditorManager>().ForScene(CMScene.SongEditMenu);
         SceneManagers.Register<EditorGridAndTrackController>().ForScene(CMScene.Mapper);
         SceneManagers.Register<EditorManager>().ForScene(CMScene.Mapper);
-        SceneManagers.Register<OutlineManager>().ForScene(CMScene.Mapper);
+        // SceneManagers.Register<OutlineManager>().ForScene(CMScene.Mapper);
         SceneManagers.Register<EditorExtrasManager>().ForScene(CMScene.Mapper);
         SceneManagers.Register<RebootManager>().ForScene(CMScene.SongSelectMenu);
         

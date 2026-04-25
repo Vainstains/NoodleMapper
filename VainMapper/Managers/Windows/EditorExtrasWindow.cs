@@ -67,6 +67,11 @@ public class EditorExtrasWindow : GenericWindow<EditorExtrasWindow>
                 .SetOnChange(val => EditorExtrasManager.Instance.GridPlusShuffleStrength = val);
             layout.AddRow().Field("Shuffle period offset").AddValueInput(0, 0, 1, 0.1f).SetValue(EditorExtrasManager.Instance.GridPlusShufflePeriodOffset)
                 .SetOnChange(val => EditorExtrasManager.Instance.GridPlusShufflePeriodOffset = val);
+            layout.AddRow().AddChild(RectTransform.Edge.Left).ExtendRight(180).AddButton("Quantize Selection To GridPlus", () =>
+            {
+                var changed = EditorExtrasManager.Instance.QuantizeSelectionToGridPlus();
+                Debug.Log($"[VM GridPlus] Quantized {changed} selected object(s) to GridPlus.");
+            });
         }
     }
 
